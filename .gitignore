@@ -1,0 +1,12 @@
+node_modules/
+creds.json
+infra/functions.tf
+infra/.terraform
+infra/.terraform.lock.hcl
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/production.tfvars
+infra/test.tfvars
+.vscode/
+lib/
+.DS_Store
