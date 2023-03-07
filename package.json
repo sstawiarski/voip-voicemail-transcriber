@@ -5,9 +5,9 @@
 	"main": "dist/src/index.js",
 	"scripts": {
 		"start": "npm run build && functions-framework --target=voicemail_handler --port=8080",
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "vitest",
 		"build": "tsc",
-		"zip": "npm run build && zip -r functions.zip dist/ && zip -g functions.zip {package.json,package-lock.json,tsconfig.json} && rm -rf dist/",
+		"zip": "zip -r functions.zip src/ && zip -g functions.zip {package.json,package-lock.json,tsconfig.json}",
 		"plan": "npm run zip && ./infra/deploy.sh plan production",
 		"deploy:test": "npm run zip && ./scripts/deploy.sh apply test && rm functions.zip",
 		"gcp-build": "npm run build"
@@ -26,6 +26,7 @@
 		"winston": "^3.8.2"
 	},
 	"devDependencies": {
-		"typescript": "^4.9.5"
+		"typescript": "^4.9.5",
+		"vitest": "^0.29.2"
 	}
 }
