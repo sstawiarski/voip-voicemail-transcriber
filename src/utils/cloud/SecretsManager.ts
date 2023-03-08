@@ -20,7 +20,7 @@ export class SecretsManager implements ISecretsManager {
 			});
 
 			if (!secret.payload || !secret.payload.data) {
-				throw new Error();
+				throw new Error("Payload data not found");
 			}
 
 			if (typeof secret.payload.data === "string") {
