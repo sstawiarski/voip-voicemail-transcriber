@@ -1,0 +1,58 @@
+resource "google_storage_bucket" "function_artifacts" {
+  name     = "${var.project}-function-artifacts"
+  location = "US"
+}
+
+resource "google_storage_bucket_object" "voicemail_gcf" {
+  name   = "${var.environment}_voicemail_handler/${timestamp()}.zip"
+  bucket = google_storage_bucket.function_artifacts.name
+  source = "../functions.zip"
+}
+
+resource "google_cloudfunctions_function" "voicemail_handler" {
+  name    = "${var.environment}-voicemail-handler"
+  runtime = "nodejs18"
+
+  entry_point = "voicemail_handler"
+
+  source_archive_bucket = google_storage_bucket.function_artifacts.id
+  source_archive_object = google_storage_bucket_object.voicemail_gcf.output_name
+
+  service_account_email = ""
+
+  trigger_http = true
+
+  timeout = 30
+
+  environment_variables = {
+    "SENDGRID_API_URL"          = "https://api.sendgrid.com/v3/mail/send"
+    "EMAIL_SENDER_NAME"         = "Voicemails"
+    "SENDER_EMAIL"              = ""
+    "PUSHOVER_API_URL"          = "https://api.pushover.net/1/messages.json"
+    "LOG_LEVEL"                 = "info"
+    "SECRET_NAME"               = "${google_secret_manager_secret.voicemail-secrets.name}/versions/latest"
+    "VOIP_MS_API_URL"           = "https://voip.ms/api/v1/rest.php"
+    "VOIP_MS_API_USERNAME"      = ""
+    "VOIP_MS_TARGET_MAILBOX_ID" = ""
+  }
+}
+
+resource "google_cloudfunctions_function_iam_member" "voicemail_handler" {
+  cloud_function = google_cloudfunctions_function.voicemail_handler.name
+  role           = "roles/cloudfunctions.invoker"
+  member         = "allUsers"
+}
+
+resource "google_secret_manager_secret" "voicemail-secrets" {
+  secret_id = "voicemail-secrets"
+  replication {
+    user_managed {
+      replicas {
+        location = "us-central1"
+      }
+      replicas {
+        location = "us-east1"
+      }
+    }
+  }
+}
