@@ -21,7 +21,7 @@ describe("SecretsManager Test Suite", () => {
 		expect(mockAccessSecretFn).toHaveBeenCalledTimes(1);
 	});
 
-    it("should successfully get and parse a Buffer secret value to JSON", async () => {
+	it("should successfully get and parse a Buffer secret value to JSON", async () => {
 		const TEST_SECRET_NAME = "test_secret";
 		const MOCK_SECRET_VALUE = Buffer.from(JSON.stringify({ secret: "value!" }));
 		const mockAccessSecretFn = vi.fn().mockImplementation((params: { name: string }) => {

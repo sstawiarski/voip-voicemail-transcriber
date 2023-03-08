@@ -1,4 +1,4 @@
 export interface ProcessedVoicemail {
-    phoneNumber: string;
-    transcribedText: string;
+	phoneNumber: string;
+	transcribedText: string;
 }

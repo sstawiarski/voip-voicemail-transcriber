@@ -1,29 +1,29 @@
 {
-  "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
-    /* Language and Environment */
-    "target": "ESNext", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "CommonJS",
-    "moduleResolution": "node", /* Specify how TypeScript looks up a file from a given module specifier. */
-    "rootDir": ".",
-    "baseUrl": ".", /* Specify the base directory to resolve non-relative module names. */ /* Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'. */
-    /* Emit */ /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
-    "outDir": "./dist", /* Specify an output folder for all emitted files. */
-    "removeComments": true, /* Disable emitting comments. */
-    /* Interop Constraints */
-    "isolatedModules": true, /* Ensure that each file can be safely transpiled without relying on other imports. */
-    "allowSyntheticDefaultImports": true, /* Allow 'import x from y' when a module doesn't have a default export. */
-    "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
-    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
-    /* Type Checking */
-    "strict": true, /* Enable all strict type-checking options. */
-    "noImplicitAny": true, /* Enable error reporting for expressions and declarations with an implied 'any' type. */
-    "strictFunctionTypes": true, /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
-    "useUnknownInCatchVariables": true, /* Default catch clause variables as 'unknown' instead of 'any'. */
-    "noUnusedLocals": true, /* Enable error reporting when local variables aren't read. */
-    "noPropertyAccessFromIndexSignature": true, /* Enforces using indexed accessors for keys declared using an indexed type. */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  },
-  "include": ["./**/*.ts"],
-  "exclude": ["node_modules/**/*"]
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM"],
+		/* Language and Environment */
+		"target": "ESNext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+		"module": "CommonJS",
+		"moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
+		"rootDir": ".",
+		"baseUrl": "." /* Specify the base directory to resolve non-relative module names. */ /* Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'. */,
+		/* Emit */ /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
+		"outDir": "./dist" /* Specify an output folder for all emitted files. */,
+		"removeComments": true /* Disable emitting comments. */,
+		/* Interop Constraints */
+		"isolatedModules": true /* Ensure that each file can be safely transpiled without relying on other imports. */,
+		"allowSyntheticDefaultImports": true /* Allow 'import x from y' when a module doesn't have a default export. */,
+		"esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+		"forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+		/* Type Checking */
+		"strict": true /* Enable all strict type-checking options. */,
+		"noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied 'any' type. */,
+		"strictFunctionTypes": true /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */,
+		"useUnknownInCatchVariables": true /* Default catch clause variables as 'unknown' instead of 'any'. */,
+		"noUnusedLocals": true /* Enable error reporting when local variables aren't read. */,
+		"noPropertyAccessFromIndexSignature": true /* Enforces using indexed accessors for keys declared using an indexed type. */,
+		"skipLibCheck": true /* Skip type checking all .d.ts files. */
+	},
+	"include": ["./**/*.ts"],
+	"exclude": ["node_modules/**/*"]
 }

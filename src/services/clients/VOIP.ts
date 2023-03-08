@@ -1,11 +1,11 @@
 import type { AxiosInstance } from "axios";
-import type { IVOIPClient } from "../../types/services/clients/IVOIPClient";
-import type { ILogger } from "../../types/utils/ILogger";
 import env from "env-var";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
-import type { VoicemailBox } from "../../types/data/voip/VoicemailBox";
 import type { Voicemail } from "../../types/data/voip/Voicemail";
+import type { VoicemailBox } from "../../types/data/voip/VoicemailBox";
 import type { VoicemailFile } from "../../types/data/voip/VoicemailFile";
+import type { IVOIPClient } from "../../types/services/clients/IVOIPClient";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
+import type { ILogger } from "../../types/utils/ILogger";
 
 const VOIP_MS_API_USERNAME = env.get("VOIP_MS_API_USERNAME").required().asEmailString();
 const VOIP_MS_API_URL = env.get("VOIP_MS_API_URL").required().asUrlString();
@@ -76,12 +76,7 @@ export class VOIPClient implements IVOIPClient {
 		}
 	}
 
-	public async getVoicemailFile(
-		inboxID: string,
-		folderName: string,
-		messageID: string,
-		format: "mp3" | "wav"
-	): Promise<string> {
+	public async getVoicemailFile(inboxID: string, folderName: string, messageID: string, format: "mp3" | "wav"): Promise<string> {
 		const password = await this.getAPIPassword();
 
 		try {

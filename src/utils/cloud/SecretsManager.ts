@@ -1,47 +1,46 @@
-import type { ILogger } from "../../types/utils/ILogger";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 import type { SecretManagerServiceClient } from "@google-cloud/secret-manager";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
+import type { ILogger } from "../../types/utils/ILogger";
 
 export class SecretsManager implements ISecretsManager {
-    #secretsClient: SecretManagerServiceClient;
-    #logger: ILogger;
+	#secretsClient: SecretManagerServiceClient;
+	#logger: ILogger;
 
-    constructor(secretsClient: SecretManagerServiceClient, logger: ILogger) {
-        this.#secretsClient = secretsClient;
-        this.#logger = logger;
-    }
+	constructor(secretsClient: SecretManagerServiceClient, logger: ILogger) {
+		this.#secretsClient = secretsClient;
+		this.#logger = logger;
+	}
 
-    public async getSecretValue(secretID: string): Promise<Record<string, string>> {
-        let secretPayload: string;
-        
-        try {
-            const [secret] = await this.#secretsClient.accessSecretVersion({
-                name: secretID
-            });
+	public async getSecretValue(secretID: string): Promise<Record<string, string>> {
+		let secretPayload: string;
 
-            if (!secret.payload || !secret.payload.data) {
-                throw new Error()
-            }
+		try {
+			const [secret] = await this.#secretsClient.accessSecretVersion({
+				name: secretID
+			});
 
-            if (typeof secret.payload.data === "string") {
-                secretPayload = secret.payload.data;
-            } else {
-                secretPayload = secret.payload.data.toString();
-            }
+			if (!secret.payload || !secret.payload.data) {
+				throw new Error();
+			}
 
-        } catch (error: unknown) {
-            this.#logger.error("Secret not found or invalid data type received");
-            throw error;
-        }
+			if (typeof secret.payload.data === "string") {
+				secretPayload = secret.payload.data;
+			} else {
+				secretPayload = secret.payload.data.toString();
+			}
+		} catch (error: unknown) {
+			this.#logger.error("Secret not found or invalid data type received");
+			throw error;
+		}
 
-        let parsed: Record<string, string>;
-        try {
-            parsed = JSON.parse(secretPayload);
-        } catch (error: unknown) {
-            this.#logger.error("Secret payload is not valid JSON");
-            throw error;
-        }
+		let parsed: Record<string, string>;
+		try {
+			parsed = JSON.parse(secretPayload);
+		} catch (error: unknown) {
+			this.#logger.error("Secret payload is not valid JSON");
+			throw error;
+		}
 
-        return parsed;
-    }
+		return parsed;
+	}
 }

@@ -17,7 +17,7 @@ describe("Logger Test Suite", () => {
 		expect(mockInfoFn).toHaveBeenLastCalledWith("test");
 	});
 
-    it("should successfully log a 'debug' level log", () => {
+	it("should successfully log a 'debug' level log", () => {
 		const mockDebugFn = vi.fn();
 		const mockWinstonLogger: Partial<WinstonLogger> = {
 			debug: mockDebugFn
@@ -31,7 +31,7 @@ describe("Logger Test Suite", () => {
 		expect(mockDebugFn).toHaveBeenLastCalledWith("test");
 	});
 
-    it("should successfully log an 'error' level log", () => {
+	it("should successfully log an 'error' level log", () => {
 		const mockErrorFn = vi.fn();
 		const mockWinstonLogger: Partial<WinstonLogger> = {
 			error: mockErrorFn

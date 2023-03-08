@@ -1,4 +1,3 @@
 export interface ISpeechService {
-    transcribe: (input: string) => Promise<string>;
-
+	transcribe: (input: string) => Promise<string>;
 }

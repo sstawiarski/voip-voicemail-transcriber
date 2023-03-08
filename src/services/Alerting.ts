@@ -1,11 +1,9 @@
 import type { EmailRequest } from "../../src/types/data/EmailRequest";
 import type { PushNotificationRequest } from "../../src/types/data/PushNotificationRequest";
-
 import type { IPushNotificationClient } from "../../src/types/services/clients/IPushNotificationClient";
-
 import type { IEmailClient } from "../types/services/clients/IEmailClient";
-import type { ILogger } from "../types/utils/ILogger";
 import type { IAlertingService } from "../types/services/IAlertingService";
+import type { ILogger } from "../types/utils/ILogger";
 
 export class AlertingService implements IAlertingService {
 	#emailService: IEmailClient;

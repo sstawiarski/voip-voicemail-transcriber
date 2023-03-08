@@ -1,6 +1,6 @@
 import { http } from "@google-cloud/functions-framework";
-import { root } from "./root";
 import env from "env-var";
+import { root } from "./root";
 
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();
 

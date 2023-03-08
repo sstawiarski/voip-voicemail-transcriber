@@ -1,10 +1,10 @@
+import env from "env-var";
 import type { ProcessedVoicemail } from "../../src/types/data/ProcessedVoicemail";
+import type { IAlertingService } from "../../src/types/services/IAlertingService";
 import type { ISpeechService } from "../../src/types/services/ISpeechService";
 import type { IVoicemailService } from "../../src/types/services/IVoicemailService";
-import type { ILogger } from "../types/utils/ILogger";
-import type { IAlertingService } from "../../src/types/services/IAlertingService";
 import type { IVOIPClient } from "../types/services/clients/IVOIPClient";
-import env from "env-var";
+import type { ILogger } from "../types/utils/ILogger";
 
 const TARGET_MAILBOX_ID = env.get("VOIP_MS_TARGET_MAILBOX_ID").required().asString();
 
@@ -14,12 +14,7 @@ export class VoicemailService implements IVoicemailService {
 	#voipService: IVOIPClient;
 	#logger: ILogger;
 
-	constructor(
-		speechService: ISpeechService,
-		alertingService: IAlertingService,
-		voipService: IVOIPClient,
-		logger: ILogger
-	) {
+	constructor(speechService: ISpeechService, alertingService: IAlertingService, voipService: IVOIPClient, logger: ILogger) {
 		this.#speechService = speechService;
 		this.#alertingService = alertingService;
 		this.#voipService = voipService;
@@ -38,12 +33,7 @@ export class VoicemailService implements IVoicemailService {
 		}
 
 		for (const message of unreadMessages) {
-			const messageData = await this.#voipService.getVoicemailFile(
-				TARGET_MAILBOX_ID,
-				message.folder,
-				message.message_num,
-				"wav"
-			);
+			const messageData = await this.#voipService.getVoicemailFile(TARGET_MAILBOX_ID, message.folder, message.message_num, "wav");
 			const transcribedText = await this.#speechService.transcribe(messageData);
 			const callerID = message.callerid.split(" ")[0];
 			await this.sendAlerts({

@@ -1,9 +1,9 @@
-import type { IEmailClient } from "../../types/services/clients/IEmailClient";
-import env from "env-var";
 import type { AxiosInstance } from "axios";
-import type { ILogger } from "../../types/utils/ILogger";
+import env from "env-var";
 import type { EmailRequest } from "../../types/data/EmailRequest";
+import type { IEmailClient } from "../../types/services/clients/IEmailClient";
 import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
+import type { ILogger } from "../../types/utils/ILogger";
 import { MimeTypes } from "../../types/utils/MimeTypes";
 
 const SENDGRID_API_URL = env.get("SENDGRID_API_URL").required().asString();

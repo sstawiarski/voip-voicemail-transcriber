@@ -1,18 +1,18 @@
-import { createContainer } from "iti";
-import { Logger } from "./utils/Logger";
+import { LoggingWinston } from "@google-cloud/logging-winston";
+import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import { SpeechClient } from "@google-cloud/speech";
-import { SpeechService } from "./services/Speech";
-import { VoicemailService } from "./services/Voicemail";
 import axios from "axios";
+import env from "env-var";
+import { createContainer } from "iti";
+import winston, { createLogger, format } from "winston";
+import { AlertingService } from "./services/Alerting";
 import { EmailClient } from "./services/clients/Email";
 import { PushNotificationClient } from "./services/clients/PushNotification";
-import { AlertingService } from "./services/Alerting";
-import { SecretsManager } from "./utils/cloud/SecretsManager";
 import { VOIPClient } from "./services/clients/VOIP";
-import { LoggingWinston } from "@google-cloud/logging-winston";
-import env from "env-var";
-import winston, { createLogger, format } from "winston";
-import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
+import { SpeechService } from "./services/Speech";
+import { VoicemailService } from "./services/Voicemail";
+import { SecretsManager } from "./utils/cloud/SecretsManager";
+import { Logger } from "./utils/Logger";
 
 export const root = createContainer()
 	.add({

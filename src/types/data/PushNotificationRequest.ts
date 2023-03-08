@@ -1,4 +1,4 @@
 export interface PushNotificationRequest {
-    title: string;
-    content: string;
+	title: string;
+	content: string;
 }
