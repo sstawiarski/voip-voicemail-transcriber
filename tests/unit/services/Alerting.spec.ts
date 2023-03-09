@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { AlertingService } from "../../src/services/Alerting";
-import type { IEmailClient } from "../../src/types/services/clients/IEmailClient";
-import type { IPushNotificationClient } from "../../src/types/services/clients/IPushNotificationClient";
-import type { ILogger } from "../../src/types/utils/ILogger";
-import { EmailRequestFactory } from "../testUtils/factories/EmailRequest";
-import { PushNotificationRequestFactory } from "../testUtils/factories/PushNotificationRequest";
+import { AlertingService } from "../../../src/services/Alerting";
+import type { IEmailClient } from "../../../src/types/services/clients/IEmailClient";
+import type { IPushNotificationClient } from "../../../src/types/services/clients/IPushNotificationClient";
+import type { ILogger } from "../../../src/types/utils/ILogger";
+import { EmailRequestFactory } from "../../utilities/factories/EmailRequest";
+import { PushNotificationRequestFactory } from "../../utilities/factories/PushNotificationRequest";
 
 describe("AlertingService Test Suite", () => {
 	const loggerInfoFn = vi.fn();

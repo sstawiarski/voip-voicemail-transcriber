@@ -1,7 +1,7 @@
 import type { SpeechClient } from "@google-cloud/speech";
 import { describe, expect, it, vi } from "vitest";
-import { SpeechService } from "../../src/services/Speech";
-import { TranscriptionResponseFactory } from "../testUtils/factories/TranscriptionResponse";
+import { SpeechService } from "../../../src/services/Speech";
+import { TranscriptionResponseFactory } from "../../utilities/factories/TranscriptionResponse";
 
 describe("SpeechService Test Suite", () => {
 	it("should successfully process transcription", async () => {

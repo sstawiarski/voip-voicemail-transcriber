@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { Logger as WinstonLogger } from "winston";
-import { Logger } from "../../src/utils/Logger";
+import { Logger } from "../../../src/utils/Logger";
 
 describe("Logger Test Suite", () => {
 	it("should successfully log an 'info' level log", () => {
