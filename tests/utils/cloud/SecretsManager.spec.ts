@@ -65,4 +65,56 @@ describe("SecretsManager Test Suite", () => {
 		}
 		expect(mockAccessSecretFn).toHaveBeenCalledTimes(1);
 	});
+
+	it("should throw error when secret payload.data is undefined", async () => {
+		expect.assertions(4);
+
+		const TEST_SECRET_NAME = "test_secret";
+		const mockAccessSecretFn = vi.fn().mockImplementation((params: { name: string }) => {
+			if (params.name === TEST_SECRET_NAME) {
+				return [{ payload: {} }];
+			}
+
+			throw new Error();
+		});
+
+		const loggerError = vi.fn();
+
+		const secretsManager = new SecretsManager({ accessSecretVersion: mockAccessSecretFn } as any, { error: loggerError } as any);
+
+		try {
+			await secretsManager.getSecretValue(TEST_SECRET_NAME);
+		} catch (error: any) {
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe("Payload data not found");
+			expect(loggerError).toHaveBeenCalledTimes(1);
+		}
+		expect(mockAccessSecretFn).toHaveBeenCalledTimes(1);
+	});
+
+	it("should throw error when secret value is not valid JSON", async () => {
+		expect.assertions(4);
+
+		const TEST_SECRET_NAME = "test_secret";
+		const mockAccessSecretFn = vi.fn().mockImplementation((params: { name: string }) => {
+			if (params.name === TEST_SECRET_NAME) {
+				return [{ payload: { data: "{" } }];
+			}
+
+			throw new Error();
+		});
+
+		const loggerError = vi.fn();
+
+		const secretsManager = new SecretsManager({ accessSecretVersion: mockAccessSecretFn } as any, { error: loggerError } as any);
+
+		try {
+			await secretsManager.getSecretValue(TEST_SECRET_NAME);
+		} catch (error: any) {
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe("Secret payload is not valid JSON");
+			expect(loggerError).toHaveBeenCalledTimes(1);
+		}
+		expect(mockAccessSecretFn).toHaveBeenCalledTimes(1);
+	})
 });
