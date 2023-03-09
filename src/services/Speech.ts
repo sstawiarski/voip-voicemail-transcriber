@@ -27,14 +27,15 @@ export class SpeechService implements ISpeechService {
 			return this.convertResponse(response);
 		} catch (error: unknown) {
 			this.#logger.error("Transcription failed!");
-			throw new Error();
+			throw new Error("Transcription failed!");
 		}
 	}
 
 	private convertResponse(input: google.cloud.speech.v1.IRecognizeResponse): string {
 		if (!input.results) {
-			throw new Error("Transcription failed");
+			throw new Error();
 		}
+		
 		return input.results.map((result) => result.alternatives?.[0].transcript).join("\n");
 	}
 }

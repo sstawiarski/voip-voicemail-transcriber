@@ -38,7 +38,7 @@ export class SecretsManager implements ISecretsManager {
 			parsed = JSON.parse(secretPayload);
 		} catch (error: unknown) {
 			this.#logger.error("Secret payload is not valid JSON");
-			throw error;
+			throw new Error("Secret payload is not valid JSON")
 		}
 
 		return parsed;
