@@ -2,8 +2,9 @@ import type { AxiosInstance } from "axios";
 import env from "env-var";
 import type { PushNotificationRequest } from "../../types/data/PushNotificationRequest";
 import type { IPushNotificationClient } from "../../types/services/clients/IPushNotificationClient";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 import type { ILogger } from "../../types/utils/ILogger";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
+import { MimeTypes } from "../../types/utils/MimeTypes";
 
 const PUSHOVER_API_URL = env.get("PUSHOVER_API_URL").required().asString();
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();
@@ -37,12 +38,9 @@ export class PushNotificationClient implements IPushNotificationClient {
 		formData.append("message", input.content);
 
 		try {
-			await this.#axios({
-				method: "POST",
-				url: PUSHOVER_API_URL,
-				data: formData,
+			await this.#axios.post(PUSHOVER_API_URL, formData, {
 				headers: {
-					"Content-Type": "multipart/form-data"
+					"Content-Type": MimeTypes.FORM_DATA
 				}
 			});
 		} catch (error) {
