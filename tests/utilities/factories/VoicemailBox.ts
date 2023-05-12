@@ -4,9 +4,9 @@ import type { VoicemailBox } from "../../../src/types/data/voip/VoicemailBox";
 
 export const VoicemailBoxFactory = Factory.define<VoicemailBox>(() => ({
 	email: faker.internet.email(),
-	mailbox: faker.datatype.number().toString(),
-	name: faker.random.word(),
+	mailbox: faker.number.int().toString(),
+	name: faker.lorem.word(),
 	password: faker.internet.password(),
-	urgent: faker.random.word(),
-	new: faker.random.word()
+	urgent: faker.lorem.word(),
+	new: faker.lorem.word()
 }));
