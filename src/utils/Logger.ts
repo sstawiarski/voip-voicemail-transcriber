@@ -9,14 +9,18 @@ export class Logger implements ILogger {
 	}
 
 	public info(message: string, data?: any) {
-		this.#logger.info.apply(this, [message, ...(!!data ? [data] : [])] as any);
+		this.#logger.info.apply(this.#logger, [message, ...(!!data ? [data] : [])] as any);
 	}
 
 	public debug(message: string, data?: any) {
-		this.#logger.debug.apply(this, [message, ...(!!data ? [data] : [])] as any);
+		this.#logger.debug.apply(this.#logger, [message, ...(!!data ? [data] : [])] as any);
+	}
+
+	public warn(message: string, data?: any) {
+		this.#logger.warn.apply(this.#logger, [message, ...(!!data ? [data] : [])] as any);
 	}
 
 	public error(message: string, data?: any) {
-		this.#logger.error.apply(this, [message, ...(!!data ? [data] : [])] as any);
+		this.#logger.error.apply(this.#logger, [message, ...(!!data ? [data] : [])] as any);
 	}
 }
