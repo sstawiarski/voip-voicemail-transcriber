@@ -13,7 +13,7 @@
 		"deploy:prod": "npm run zip && cd infrastructure && ENVIRONMENT=prod cdktf deploy --auto-approve=true && cd .. && rm functions.zip && rm -rf dist/",
 		"gcp-build": "npm run build",
 		"deploy:get": "cd infrastructure && cdktf get && cd ..",
-		"deploy:plan": "cd infrastructure && npm ci && cdktf plan && cd .."
+		"deploy:plan": "cd infrastructure && npm ci && cdktf diff --no-color && cd .."
 	},
 	"keywords": [],
 	"author": "",
