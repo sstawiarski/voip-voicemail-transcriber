@@ -7,6 +7,8 @@ on:
     workflow_dispatch:
         branches:
             - main
+permissions:
+    checks: read
 
 jobs:
     terraform:
