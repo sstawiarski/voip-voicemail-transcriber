@@ -24,11 +24,13 @@ jobs:
                   if [[ "${{github.base_ref}}" == "develop" ]]; then
                     echo "environment=dev" >> "$GITHUB_ENV"
                     echo "gcp_secret_name=DEV_GCP_CREDENTIALS" >> "$GITHUB_ENV"
+                    echo "tf_bucket_secret_name=DEV_TF_BUCKET" >> "$GITHUB_ENV"
                   fi
 
                   if [[ "${{github.base_ref}}" == "main" ]]; then
                     echo "environment=prod" >> "$GITHUB_ENV"
                     echo "gcp_secret_name=PROD_GCP_CREDENTIALS" >> "$GITHUB_ENV"
+                    echo "tf_bucket_secret_name=PROD_TF_BUCKET" >> "$GITHUB_ENV"
                   fi
 
             - uses: actions/setup-node@v3
@@ -52,6 +54,7 @@ jobs:
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
                   ENVIRONMENT: ${{ env.environment }}
+                  TF_BUCKET: ${{ secrets[env.gcp_tf_bucket_secret_name] }}
 
             - name: Run unit tests
               run: npm test
@@ -62,6 +65,7 @@ jobs:
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
                   ENVIRONMENT: ${{ env.environment }}
+                  TF_BUCKET: ${{ secrets[env.gcp_tf_bucket_secret_name] }}
               continue-on-error: true
 
             - uses: actions/github-script@v5

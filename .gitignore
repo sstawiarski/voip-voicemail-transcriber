@@ -13,3 +13,4 @@ lib/
 *creds.json
 /dist
 /functions.zip
+/infrastructure/.env
