@@ -10,3 +10,6 @@ infra/test.tfvars
 .vscode/
 lib/
 .DS_Store
+*creds.json
+/dist
+/functions.zip
