@@ -7,10 +7,16 @@ import {
 	storageBucket,
 	storageBucketObject
 } from "@cdktf/provider-google";
-import { App, TerraformStack } from "cdktf";
+import { App, GcsBackend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
+import { get } from "env-var";
 import { resolve } from "node:path";
 import { ServiceAccount } from "./constructs/ServiceAccount";
+const isCI = require("is-ci");
+
+const environment = get("ENVIRONMENT").default("dev").asEnum(["dev", "prod"]);
+
+let tfBucket = get("TF_BUCKET").default("").asString();
 
 class VoicemailServiceStack extends TerraformStack {
 	constructor(scope: Construct, id: string, config: { environment: string; region: string }) {
@@ -19,9 +25,9 @@ class VoicemailServiceStack extends TerraformStack {
 		const PROJECT_ID = `${config.environment}-voicemail-service`;
 
 		new provider.GoogleProvider(this, "google-provider", {
-			credentials: resolve(__dirname, "credentials", `${config.environment}.json`),
 			project: PROJECT_ID,
-			region: config.region
+			region: config.region,
+			...(!isCI ? { credentials: resolve(__dirname, "credentials", `${config.environment}.json`) } : {})
 		});
 
 		/** Secrets */
@@ -107,6 +113,27 @@ class VoicemailServiceStack extends TerraformStack {
 	}
 }
 
-const app = new App();
-new VoicemailServiceStack(app, "infrastructure", { environment: process.env.ENVIRONMENT ?? "dev", region: process.env.GCP_REGION ?? "us-central1" });
-app.synth();
+function synth() {
+	const app = new App();
+	const stack = new VoicemailServiceStack(app, "infrastructure", { environment, region: process.env.GCP_REGION ?? "us-central1" });
+
+	new GcsBackend(stack, {
+		bucket: tfBucket,
+		prefix: "terraform/state"
+	});
+	app.synth();
+}
+
+/** Load local overrides if applicable */
+if (!isCI) {
+	import("dotenv")
+		.then(({ config }) => config())
+		.then(() => {
+			tfBucket = get(environment === "dev" ? "DEV_TF_BUCKET" : "PROD_TF_BUCKET")
+				.default("")
+				.asString();
+			synth();
+		});
+} else {
+	synth();
+}

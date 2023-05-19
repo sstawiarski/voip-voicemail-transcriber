@@ -1,0 +1,78 @@
+name: Deploy
+
+on:
+    push:
+        branches:
+            - develop
+    workflow_dispatch:
+        branches:
+            - main
+
+permissions:
+    contents: read
+    checks: read
+
+jobs:
+    terraform:
+        name: "Deploy"
+        runs-on: ubuntu-latest
+        steps:
+            - name: Wait for tests to pass
+              uses: lewagon/wait-on-check-action@v1.3.1
+              with:
+                ref: ${{ github.ref }}
+                check-name: 'Build'
+                repo-token: ${{ secrets.GITHUB_TOKEN }}
+                wait-interval: 10
+
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Set variables
+              id: setvars
+              run: |
+                  if [[ "${{github.ref_name}}" == "develop" ]]; then
+                    echo "environment=dev" >> "$GITHUB_ENV"
+                    echo "gcp_secret_name=DEV_GCP_CREDENTIALS" >> "$GITHUB_ENV"
+                    echo "tf_bucket_secret_name=DEV_TF_BUCKET" >> "$GITHUB_ENV"
+                  fi
+
+                  if [[ "${{github.ref_name}}" == "main" ]]; then
+                    echo "environment=prod" >> "$GITHUB_ENV"
+                    echo "gcp_secret_name=PROD_GCP_CREDENTIALS" >> "$GITHUB_ENV"
+                    echo "tf_bucket_secret_name=PROD_TF_BUCKET" >> "$GITHUB_ENV"
+                  fi
+
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: "18.x"
+                  cache: "npm"
+
+            - name: Install cdktf
+              run: npm install -g cdktf-cli
+
+            - name: Install Terraform
+              uses: hashicorp/setup-terraform@v2
+              with:
+                  terraform_version: 1.4.6
+                  terraform_wrapper: false
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Generate bindings for providers and modules
+              run: npm run deploy:get
+              env:
+                  GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
+                  ENVIRONMENT: ${{ env.environment }}
+                  TF_BUCKET: ${{ secrets[env.tf_bucket_secret_name] }}
+
+            - name: Run unit tests
+              run: npm test
+
+            - name: Deploy
+              run: npm run deploy:${{ env.environment }}
+              env:
+                  GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
+                  ENVIRONMENT: ${{ env.environment }}
+                  TF_BUCKET: ${{ secrets[env.tf_bucket_secret_name] }}
