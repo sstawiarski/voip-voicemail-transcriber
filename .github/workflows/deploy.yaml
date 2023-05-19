@@ -64,7 +64,7 @@ jobs:
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
                   ENVIRONMENT: ${{ env.environment }}
-                  TF_BUCKET: ${{ secrets[env.gcp_tf_bucket_secret_name] }}
+                  TF_BUCKET: ${{ secrets[env.tf_bucket_secret_name] }}
 
             - name: Run unit tests
               run: npm test
@@ -74,4 +74,4 @@ jobs:
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
                   ENVIRONMENT: ${{ env.environment }}
-                  TF_BUCKET: ${{ secrets[env.gcp_tf_bucket_secret_name] }}
+                  TF_BUCKET: ${{ secrets[env.tf_bucket_secret_name] }}
