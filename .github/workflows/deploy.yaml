@@ -10,7 +10,7 @@ on:
 
 jobs:
     terraform:
-        name: "Terraform CDK Diff"
+        name: "Deploy"
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -19,12 +19,12 @@ jobs:
             - name: Set variables
               id: setvars
               run: |
-                  if [[ "${{github.base_ref}}" == "develop" ]]; then
+                  if [[ "${{github.ref_name}}" == "develop" ]]; then
                     echo "environment=dev" >> "$GITHUB_ENV"
                     echo "gcp_secret_name=DEV_GCP_CREDENTIALS" >> "$GITHUB_ENV"
                   fi
 
-                  if [[ "${{github.base_ref}}" == "main" ]]; then
+                  if [[ "${{github.ref_name}}" == "main" ]]; then
                     echo "environment=prod" >> "$GITHUB_ENV"
                     echo "gcp_secret_name=PROD_GCP_CREDENTIALS" >> "$GITHUB_ENV"
                   fi
