@@ -1,14 +1,12 @@
-name: Comment Terraform Plan on PR
+name: Deploy
 
 on:
-    pull_request:
+    push:
+        branches:
+            - develop
+    workflow_dispatch:
         branches:
             - main
-            - develop
-
-permissions:
-    contents: read
-    pull-requests: write
 
 jobs:
     terraform:
@@ -56,35 +54,8 @@ jobs:
             - name: Run unit tests
               run: npm test
 
-            - name: Generate Terraform plan
-              id: plan
-              run: npm run deploy:plan
+            - name: Deploy
+              run: npm run deploy:${{ env.environment }}
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
                   ENVIRONMENT: ${{ env.environment }}
-              continue-on-error: true
-
-            - uses: actions/github-script@v5
-              if: github.event_name == 'pull_request'
-              env:
-                  PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-              with:
-                  github-token: ${{secrets.GITHUB_TOKEN}}
-                  script: |
-                      const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-                      <details>
-                      <summary>Show Plan</summary>
-
-                      \`\`\`${process.env.PLAN}\`\`\`
-
-                      </details>
-
-                      * Pusher: @${{ github.actor }}
-                      * Action: \`${{ github.event_name }}\`
-                      * Workflow: \`${{ github.workflow }}\``
-                      github.rest.issues.createComment({
-                        issue_number: context.issue.number,
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        body: output
-                      })
