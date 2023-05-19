@@ -18,19 +18,6 @@ const environment = get("ENVIRONMENT").default("dev").asEnum(["dev", "prod"]);
 
 let tfBucket = get("TF_BUCKET").default("").asString();
 
-if (!isCI) {
-	import("dotenv")
-		.then(({ config }) => config())
-		.then(() => {
-			tfBucket = get(environment === "dev" ? "DEV_TF_BUCKET" : "PROD_TF_BUCKET")
-				.default("")
-				.asString();
-			synth();
-		});
-} else {
-	synth();
-}
-
 class VoicemailServiceStack extends TerraformStack {
 	constructor(scope: Construct, id: string, config: { environment: string; region: string }) {
 		super(scope, id);
@@ -135,4 +122,18 @@ function synth() {
 		prefix: "terraform/state"
 	});
 	app.synth();
+}
+
+/** Load local overrides if applicable */
+if (!isCI) {
+	import("dotenv")
+		.then(({ config }) => config())
+		.then(() => {
+			tfBucket = get(environment === "dev" ? "DEV_TF_BUCKET" : "PROD_TF_BUCKET")
+				.default("")
+				.asString();
+			synth();
+		});
+} else {
+	synth();
 }
