@@ -4,8 +4,8 @@ import type { Voicemail } from "../../types/data/voip/Voicemail";
 import type { VoicemailBox } from "../../types/data/voip/VoicemailBox";
 import type { VoicemailFile } from "../../types/data/voip/VoicemailFile";
 import type { IVOIPClient } from "../../types/services/clients/IVOIPClient";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 import type { ILogger } from "../../types/utils/ILogger";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 
 const VOIP_MS_API_USERNAME = env.get("VOIP_MS_API_USERNAME").required().asEmailString();
 const VOIP_MS_API_URL = env.get("VOIP_MS_API_URL").required().asUrlString();
@@ -38,10 +38,12 @@ export class VOIPClient implements IVOIPClient {
 				}
 			});
 
-			this.#logger.info(JSON.stringify(data));
+			this.#logger.debug("Received response from VoIP API getting voicemail boxes", { ...data });
+
 			if (data.status !== "success") {
 				throw new Error();
 			}
+
 			return data.voicemails;
 		} catch (error: unknown) {
 			this.#logger.error("Failed to get voicemails from Voip.ms");
@@ -53,7 +55,7 @@ export class VOIPClient implements IVOIPClient {
 		const password = await this.getAPIPassword();
 
 		try {
-			const { data } = await this.#axios.get<APIWrapper<{ messages: Voicemail[] }>>(VOIP_MS_API_URL, {
+			const { data } = await this.#axios.get<APIWrapper<{ messages: Voicemail[] }> | { status: "no_messages" }>(VOIP_MS_API_URL, {
 				params: {
 					api_username: VOIP_MS_API_USERNAME,
 					api_password: password,
@@ -63,10 +65,14 @@ export class VOIPClient implements IVOIPClient {
 				}
 			});
 
-			this.#logger.info(JSON.stringify(data));
+			this.#logger.debug("Received response from VOIP service getting voicemails", { ...data });
 
-			if (data.status !== "success") {
+			if (data.status !== "success" && data.status !== "no_messages") {
 				throw new Error();
+			}
+
+			if (data.status === "no_messages") {
+				return [];
 			}
 
 			return data.messages;
@@ -92,7 +98,7 @@ export class VOIPClient implements IVOIPClient {
 				}
 			});
 
-			this.#logger.info(JSON.stringify(data));
+			this.#logger.debug("Received response getting voicemail file", { ...data });
 
 			if (data.status !== "success") {
 				throw new Error();
@@ -100,7 +106,7 @@ export class VOIPClient implements IVOIPClient {
 
 			return data.message.data;
 		} catch (error: unknown) {
-			this.#logger.error("Failed to get voicemail file from Voip.ms");
+			this.#logger.error("Failed to get voicemail file from Voip.ms", { messageID, inboxID, folderName });
 			throw error;
 		}
 	}

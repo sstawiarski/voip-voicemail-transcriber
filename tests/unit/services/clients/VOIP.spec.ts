@@ -15,9 +15,11 @@ describe("VOIPClient Test Suite", () => {
 
 	const loggerInfoFn = vi.fn();
 	const loggerErrorFn = vi.fn();
+	const loggerDebugFn = vi.fn();
 	const mockLogger = {
 		info: loggerInfoFn,
-		error: loggerErrorFn
+		error: loggerErrorFn,
+		debug: loggerDebugFn
 	} as unknown as ILogger;
 
 	beforeAll(() => {

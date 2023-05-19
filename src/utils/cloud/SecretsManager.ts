@@ -1,6 +1,6 @@
 import type { SecretManagerServiceClient } from "@google-cloud/secret-manager";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 import type { ILogger } from "../../types/utils/ILogger";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 
 export class SecretsManager implements ISecretsManager {
 	#secretsClient: SecretManagerServiceClient;
@@ -38,7 +38,7 @@ export class SecretsManager implements ISecretsManager {
 			parsed = JSON.parse(secretPayload);
 		} catch (error: unknown) {
 			this.#logger.error("Secret payload is not valid JSON");
-			throw new Error("Secret payload is not valid JSON")
+			throw new Error("Secret payload is not valid JSON");
 		}
 
 		return parsed;

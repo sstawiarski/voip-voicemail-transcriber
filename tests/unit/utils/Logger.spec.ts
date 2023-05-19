@@ -31,6 +31,20 @@ describe("Logger Test Suite", () => {
 		expect(mockDebugFn).toHaveBeenLastCalledWith("test");
 	});
 
+	it("should successfully log a 'warn' level log", () => {
+		const mockWarnFn = vi.fn();
+		const mockWinstonLogger: Partial<WinstonLogger> = {
+			warn: mockWarnFn
+		};
+
+		const logger = new Logger(mockWinstonLogger as any);
+
+		logger.warn("test");
+
+		expect(mockWarnFn).toHaveBeenCalledTimes(1);
+		expect(mockWarnFn).toHaveBeenLastCalledWith("test");
+	});
+
 	it("should successfully log an 'error' level log", () => {
 		const mockErrorFn = vi.fn();
 		const mockWinstonLogger: Partial<WinstonLogger> = {
