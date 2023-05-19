@@ -8,7 +8,7 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"build": "tsc",
-		"zip": "zip -r functions.zip src/ && zip -g functions.zip {package.json,package-lock.json,tsconfig.json}",
+		"zip": "zip -r functions.zip src/ package.json package-lock.json tsconfig.json",
 		"deploy:dev": "npm run zip && cd infrastructure && ENVIRONMENT=dev cdktf deploy --auto-approve=true && cd .. && rm functions.zip && rm -rf dist/",
 		"deploy:prod": "npm run zip && cd infrastructure && ENVIRONMENT=prod cdktf deploy --auto-approve=true && cd .. && rm functions.zip && rm -rf dist/",
 		"gcp-build": "npm run build",
