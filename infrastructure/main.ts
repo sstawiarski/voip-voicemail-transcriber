@@ -31,17 +31,6 @@ if (!isCI) {
 	synth();
 }
 
-function synth() {
-	const app = new App();
-	const stack = new VoicemailServiceStack(app, "infrastructure", { environment, region: process.env.GCP_REGION ?? "us-central1" });
-
-	new GcsBackend(stack, {
-		bucket: tfBucket,
-		prefix: "terraform/state"
-	});
-	app.synth();
-}
-
 class VoicemailServiceStack extends TerraformStack {
 	constructor(scope: Construct, id: string, config: { environment: string; region: string }) {
 		super(scope, id);
@@ -135,4 +124,15 @@ class VoicemailServiceStack extends TerraformStack {
 			location: voicemailHandlerFn.location
 		});
 	}
+}
+
+function synth() {
+	const app = new App();
+	const stack = new VoicemailServiceStack(app, "infrastructure", { environment, region: process.env.GCP_REGION ?? "us-central1" });
+
+	new GcsBackend(stack, {
+		bucket: tfBucket,
+		prefix: "terraform/state"
+	});
+	app.synth();
 }
