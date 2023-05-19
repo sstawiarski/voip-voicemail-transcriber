@@ -11,6 +11,7 @@ import { App, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { resolve } from "node:path";
 import { ServiceAccount } from "./constructs/ServiceAccount";
+const isCI = require("is-ci");
 
 class VoicemailServiceStack extends TerraformStack {
 	constructor(scope: Construct, id: string, config: { environment: string; region: string }) {
@@ -19,9 +20,9 @@ class VoicemailServiceStack extends TerraformStack {
 		const PROJECT_ID = `${config.environment}-voicemail-service`;
 
 		new provider.GoogleProvider(this, "google-provider", {
-			credentials: resolve(__dirname, "credentials", `${config.environment}.json`),
 			project: PROJECT_ID,
-			region: config.region
+			region: config.region,
+			...(!isCI ? { credentials: resolve(__dirname, "credentials", `${config.environment}.json`) } : {})
 		});
 
 		/** Secrets */

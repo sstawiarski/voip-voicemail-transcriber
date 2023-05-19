@@ -1,0 +1,90 @@
+name: Comment Terraform Plan on PR
+
+on:
+    pull_request:
+        branches:
+            - main
+            - develop
+
+permissions:
+    contents: read
+    pull-requests: write
+
+jobs:
+    terraform:
+        name: "Terraform CDK Diff"
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Set variables
+              id: setvars
+              run: |
+                  if [[ "${{github.base_ref}}" == "develop" ]]; then
+                    echo "environment=dev" >> "$GITHUB_ENV"
+                    echo "gcp_secret_name=DEV_GCP_CREDENTIALS" >> "$GITHUB_ENV"
+                  fi
+
+                  if [[ "${{github.base_ref}}" == "main" ]]; then
+                    echo "environment=prod" >> "$GITHUB_ENV"
+                    echo "gcp_secret_name=PROD_GCP_CREDENTIALS" >> "$GITHUB_ENV"
+                  fi
+
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: "18.x"
+                  cache: "npm"
+
+            - name: Install cdktf
+              run: npm install -g cdktf-cli
+
+            - name: Install Terraform
+              uses: hashicorp/setup-terraform@v2
+              with:
+                  terraform_version: 1.4.6
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Generate bindings for providers and modules
+              run: npm run deploy:get
+              env:
+                  GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
+                  ENVIRONMENT: ${{ env.environment }}
+
+            - name: Run unit tests
+              run: npm test
+
+            - name: Generate Terraform plan
+              id: plan
+              run: npm run deploy:plan
+              env:
+                  GOOGLE_CREDENTIALS: ${{ secrets[env.gcp_secret_name] }}
+                  ENVIRONMENT: ${{ env.environment }}
+              continue-on-error: true
+
+            - uses: actions/github-script@v5
+              if: github.event_name == 'pull_request'
+              env:
+                  PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+              with:
+                  github-token: ${{secrets.GITHUB_TOKEN}}
+                  script: |
+                      const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+                      <details>
+                      <summary>Show Plan</summary>
+
+                      \`\`\`${process.env.PLAN}\`\`\`
+
+                      </details>
+
+                      * Pusher: @${{ github.actor }}
+                      * Action: \`${{ github.event_name }}\`
+                      * Workflow: \`${{ github.workflow }}\``
+                      github.rest.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: output
+                      })
