@@ -16,10 +16,11 @@ const isCI = require("is-ci");
 
 const environment = get("ENVIRONMENT").default("dev").asEnum(["dev", "prod"]);
 
+let functionArtifactBucketName = get("FN_ARTIFACT_BUCKET_NAME").default("").asString();
 let tfBucket = get("TF_BUCKET").default("").asString();
 
 class VoicemailServiceStack extends TerraformStack {
-	constructor(scope: Construct, id: string, config: { environment: string; region: string }) {
+	constructor(scope: Construct, id: string, config: { environment: string; region: string; fnArtifactBucket: string }) {
 		super(scope, id);
 
 		const PROJECT_ID = `${config.environment}-voicemail-service`;
@@ -54,7 +55,7 @@ class VoicemailServiceStack extends TerraformStack {
 
 		/** Buckets */
 		const artifactBucket = new storageBucket.StorageBucket(this, "function-artifacts", {
-			name: "function-artifacts",
+			name: config.fnArtifactBucket,
 			location: "US"
 		});
 
@@ -88,11 +89,12 @@ class VoicemailServiceStack extends TerraformStack {
 					EMAIL_SENDER_NAME: "Voicemails",
 					SENDER_EMAIL: "voicemails@shawnstawiarski.com",
 					PUSHOVER_API_URL: "https://api.pushover.net/1/messages.json",
-					LOG_LEVEL: "info",
+					LOG_LEVEL: config.environment === "dev" ? "debug" : "info",
 					SECRET_NAME: `${secrets.name}/versions/latest`,
 					VOIP_MS_API_URL: "https://voip.ms/api/v1/rest.php",
 					VOIP_MS_API_USERNAME: "contact@shawnstawiarski.com",
-					VOIP_MS_TARGET_MAILBOX_ID: "19085"
+					VOIP_MS_TARGET_MAILBOX_ID: "19085",
+					ENVIRONMENT: config.environment
 				}
 			}
 		});
@@ -115,7 +117,7 @@ class VoicemailServiceStack extends TerraformStack {
 
 function synth() {
 	const app = new App();
-	const stack = new VoicemailServiceStack(app, "infrastructure", { environment, region: process.env.GCP_REGION ?? "us-central1" });
+	const stack = new VoicemailServiceStack(app, "infrastructure", { environment, region: process.env.GCP_REGION ?? "us-central1", fnArtifactBucket: functionArtifactBucketName });
 
 	new GcsBackend(stack, {
 		bucket: tfBucket,
@@ -131,6 +133,9 @@ if (!isCI) {
 		.then(() => {
 			tfBucket = get(environment === "dev" ? "DEV_TF_BUCKET" : "PROD_TF_BUCKET")
 				.default("")
+				.asString();
+			functionArtifactBucketName = get(environment === "dev" ? "DEV_FUNCTION_ARTIFACT_BUCKET_NAME" : "PROD_FUNCTION_ARTIFACT_BUCKET_NAME")
+				.required()
 				.asString();
 			synth();
 		});
