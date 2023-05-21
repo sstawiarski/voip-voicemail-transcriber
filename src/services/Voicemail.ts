@@ -21,19 +21,19 @@ export class VoicemailService implements IVoicemailService {
 		this.#logger = logger;
 	}
 
-	public async processVoicemails(): Promise<void> {
+	public async processVoicemails(): Promise<number> {
 		this.#logger.info("Begin processing voicemails");
 
 		const messages = await this.#voipService.getVoicemails(TARGET_MAILBOX_ID);
 		if (!messages.length) {
 			this.#logger.info("No messages found; returning...");
-			return;
+			return 0;
 		}
 
 		const unreadMessages = messages.filter((message) => message.listened === "no");
 		if (!unreadMessages.length) {
 			this.#logger.info("No unread messages; returning...");
-			return;
+			return 0;
 		}
 
 		for (const message of unreadMessages) {
@@ -48,6 +48,8 @@ export class VoicemailService implements IVoicemailService {
 		}
 
 		this.#logger.info("Voicemail processing completed successfully!");
+
+		return unreadMessages.length;
 	}
 
 	private async sendAlerts(input: ProcessedVoicemail): Promise<void> {
