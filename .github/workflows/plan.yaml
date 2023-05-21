@@ -25,14 +25,14 @@ jobs:
                     echo "environment=dev" >> "$GITHUB_ENV"
                     echo "gcp_secret_name=DEV_GCP_CREDENTIALS" >> "$GITHUB_ENV"
                     echo "tf_bucket_secret_name=DEV_TF_BUCKET" >> "$GITHUB_ENV"
-                    echo "fn_artifact_bucket_name=DEV_FN_ARTIFACT_BUCKET" >> "$GITHUB_ENV"
+                    echo "fn_artifact_bucket_name=DEV_FN_ARTIFACT_BUCKET_NAME" >> "$GITHUB_ENV"
                   fi
 
                   if [[ "${{github.base_ref}}" == "main" ]]; then
                     echo "environment=prod" >> "$GITHUB_ENV"
                     echo "gcp_secret_name=PROD_GCP_CREDENTIALS" >> "$GITHUB_ENV"
                     echo "tf_bucket_secret_name=PROD_TF_BUCKET" >> "$GITHUB_ENV"
-                    echo "fn_artifact_bucket_name=PROD_FN_ARTIFACT_BUCKET" >> "$GITHUB_ENV"
+                    echo "fn_artifact_bucket_name=PROD_FN_ARTIFACT_BUCKET_NAME" >> "$GITHUB_ENV"
                   fi
 
             - uses: actions/setup-node@v3
