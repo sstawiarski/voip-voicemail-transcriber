@@ -1,5 +1,5 @@
 import { Logger as WinstonLogger } from "winston";
-import { ILogger } from "../../src/types/utils/ILogger";
+import type { ILogger } from "../../src/types/utils/ILogger";
 
 export class Logger implements ILogger {
 	#logger: WinstonLogger;
