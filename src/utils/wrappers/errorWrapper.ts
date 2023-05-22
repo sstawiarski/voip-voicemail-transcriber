@@ -1,9 +1,7 @@
-import { HttpFunction } from "@google-cloud/functions-framework";
 import { root, tokens } from "../../root";
+import type { WrapperFn } from "../../types/utils/WrapperFn";
 
-type WrapperFn = (fn: HttpFunction) => HttpFunction;
-
-const wrapper: WrapperFn = (fn: HttpFunction) => async (req, res) => {
+const wrapper: WrapperFn = (fn) => async (req, res) => {
 	try {
 		return await fn(req, res);
 	} catch (error) {
@@ -12,10 +10,12 @@ const wrapper: WrapperFn = (fn: HttpFunction) => async (req, res) => {
 
 		if (error instanceof Error) {
 			return res.status(500).send({
+				success: false,
 				message: error.message
 			});
 		} else {
 			return res.status(500).send({
+				success: false,
 				message: "Request failed for an unknown reason; see logs for details."
 			});
 		}
