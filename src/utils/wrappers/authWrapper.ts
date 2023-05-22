@@ -1,6 +1,6 @@
 import env from "env-var";
 import { root, tokens } from "../../root";
-import { WrapperFn } from "../../types/utils/WrapperFn";
+import type { WrapperFn } from "../../types/utils/WrapperFn";
 
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();
 

@@ -1,5 +1,5 @@
-import { Voicemail } from "../../data/voip/Voicemail";
-import { VoicemailBox } from "../../data/voip/VoicemailBox";
+import type { Voicemail } from "../../data/voip/Voicemail";
+import type { VoicemailBox } from "../../data/voip/VoicemailBox";
 
 export interface IVOIPClient {
 	getVoicemailBoxes: () => Promise<VoicemailBox[]>;

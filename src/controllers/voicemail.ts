@@ -1,8 +1,8 @@
-import { HttpFunction } from "@google-cloud/functions-framework";
-import { root, tokens } from "../root";
-import errorWrapper from "../utils/wrappers/errorWrapper";
-import authWrapper from "../utils/wrappers/authWrapper";
+import type { HttpFunction } from "@google-cloud/functions-framework";
 import { pipe } from "fp-ts/function";
+import { root, tokens } from "../root";
+import authWrapper from "../utils/wrappers/authWrapper";
+import errorWrapper from "../utils/wrappers/errorWrapper";
 
 const FUNCTION_NAME = "voicemail_handler";
 const voicemailHandlerFnBase: HttpFunction = async (_, res) => {
