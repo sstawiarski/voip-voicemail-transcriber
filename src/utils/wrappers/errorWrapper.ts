@@ -1,9 +1,7 @@
-import { HttpFunction } from "@google-cloud/functions-framework";
 import { root, tokens } from "../../root";
+import { WrapperFn } from "../../types/utils/WrapperFn";
 
-type WrapperFn = (fn: HttpFunction) => HttpFunction;
-
-const wrapper: WrapperFn = (fn: HttpFunction) => async (req, res) => {
+const wrapper: WrapperFn = (fn) => async (req, res) => {
 	try {
 		return await fn(req, res);
 	} catch (error) {
