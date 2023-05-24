@@ -4,16 +4,14 @@ import type { ProcessedVoicemail } from "../../src/types/data/ProcessedVoicemail
 import type { IAlertingService } from "../../src/types/services/IAlertingService";
 import type { ISpeechService } from "../../src/types/services/ISpeechService";
 import type { IVoicemailService } from "../../src/types/services/IVoicemailService";
+import Constants from "../constants";
 import type { Voicemail } from "../types/data/voip/Voicemail";
 import type { IVOIPClient } from "../types/services/clients/IVOIPClient";
 import type { ILogger } from "../types/utils/ILogger";
 import type { CloudStorageFileInput, ICloudStorage } from "../types/utils/cloud/ICloudStorage";
-import { flatPromiseAll } from "../utils/flatPromiseAll";
 
 const TARGET_MAILBOX_ID = env.get("VOIP_MS_TARGET_MAILBOX_ID").required().asString();
 const VOICEMAIL_OUTPUT_BUCKET = env.get("VOICEMAIL_OUTPUT_BUCKET").required().asString();
-const AUDIO_FILE_EXTENSION = "wav";
-const TRANSCRIPTION_FILE_EXTENSION = "txt";
 
 export class VoicemailService implements IVoicemailService {
 	#speechService: ISpeechService;
@@ -45,7 +43,7 @@ export class VoicemailService implements IVoicemailService {
 			return 0;
 		}
 
-		const voicemailFiles = await flatPromiseAll(unreadMessages.map(this.processVoicemail.bind(this)));
+		const voicemailFiles = (await Promise.all(unreadMessages.map(this.processVoicemail.bind(this)))).flat();
 
 		await this.#cloudStorage.saveFiles(voicemailFiles);
 
@@ -55,7 +53,7 @@ export class VoicemailService implements IVoicemailService {
 	}
 
 	private async processVoicemail(message: Voicemail): Promise<[CloudStorageFileInput, CloudStorageFileInput]> {
-		const messageData = await this.#voipService.getVoicemailFile(TARGET_MAILBOX_ID, message.folder, message.message_num, AUDIO_FILE_EXTENSION);
+		const messageData = await this.#voipService.getVoicemailFile(TARGET_MAILBOX_ID, message.folder, message.message_num, Constants.AUDIO_FILE_EXTENSION);
 		const transcribedText = await this.#speechService.transcribe(messageData);
 		const callerID = message.callerid.split(" ")[0];
 
@@ -73,14 +71,16 @@ export class VoicemailService implements IVoicemailService {
 		return [
 			{
 				destinationBucket: VOICEMAIL_OUTPUT_BUCKET,
-				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${message.message_num}_audio.${AUDIO_FILE_EXTENSION}`,
-				data: Buffer.from(messageData, 'base64')
+				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${message.message_num}_audio.${
+					Constants.AUDIO_FILE_EXTENSION
+				}`,
+				data: Buffer.from(messageData, "base64")
 			},
 			{
 				destinationBucket: VOICEMAIL_OUTPUT_BUCKET,
-				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${
-					message.message_num
-				}_transcription.${TRANSCRIPTION_FILE_EXTENSION}`,
+				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${message.message_num}_transcription.${
+					Constants.TRANSCRIPTION_FILE_EXTENSION
+				}`,
 				data: transcribedText
 			}
 		];
