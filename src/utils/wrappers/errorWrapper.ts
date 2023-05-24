@@ -1,7 +1,7 @@
 import { root, tokens } from "../../root";
 import type { WrapperFn } from "../../types/utils/WrapperFn";
 
-const wrapper: WrapperFn = (fn) => async (req, res) => {
+export const errorWrapper: WrapperFn = (fn) => async (req, res) => {
 	try {
 		return await fn(req, res);
 	} catch (error) {
@@ -21,5 +21,3 @@ const wrapper: WrapperFn = (fn) => async (req, res) => {
 		}
 	}
 };
-
-export default wrapper;
