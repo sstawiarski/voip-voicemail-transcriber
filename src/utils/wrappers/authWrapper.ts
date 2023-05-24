@@ -4,7 +4,7 @@ import type { WrapperFn } from "../../types/utils/WrapperFn";
 
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();
 
-const wrapper: WrapperFn = (fn) => async (req, res) => {
+export const authWrapper: WrapperFn = (fn) => async (req, res) => {
 	const secretsManager = root.get(tokens.secretsManager);
 	const logger = root.get(tokens.logger);
 
@@ -22,5 +22,3 @@ const wrapper: WrapperFn = (fn) => async (req, res) => {
 
 	return fn(req, res);
 };
-
-export default wrapper;

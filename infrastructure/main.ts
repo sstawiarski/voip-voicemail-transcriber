@@ -12,15 +12,17 @@ import { Construct } from "constructs";
 import { get } from "env-var";
 import { resolve } from "node:path";
 import { ServiceAccount } from "./constructs/ServiceAccount";
+import { StorageBucket } from "./constructs/StorageBucket";
 const isCI = require("is-ci");
 
 const environment = get("ENVIRONMENT").default("dev").asEnum(["dev", "prod"]);
+let voicemailBucketSuffix = get("VOICEMAIL_OUTPUT_BUCKET_SUFFIX").default("").asString();
 
 let functionArtifactBucketName = get("FN_ARTIFACT_BUCKET_NAME").default("").asString();
 let tfBucket = get("TF_BUCKET").default("").asString();
 
 class VoicemailServiceStack extends TerraformStack {
-	constructor(scope: Construct, id: string, config: { environment: string; region: string; fnArtifactBucket: string }) {
+	constructor(scope: Construct, id: string, config: { environment: string; region: string; fnArtifactBucket: string; voicemailBucketSuffix: string }) {
 		super(scope, id);
 
 		const PROJECT_ID = `${config.environment}-voicemail-service`;
@@ -59,6 +61,16 @@ class VoicemailServiceStack extends TerraformStack {
 			location: "US"
 		});
 
+		const voicemailOutputBucket = new StorageBucket(this, "voicemail-outputs", {
+			name: `${config.environment}-voicemail-outputs-${config.voicemailBucketSuffix}`,
+			location: "US",
+			permissions: [
+				{
+					member: `serviceAccount:${handlerServiceAccount.email}`,
+					role: "roles/storage.objectCreator"
+				}
+			]
+		});
 		/** Functions and Artifacts */
 		const voicemailHandlerCodeObject = new storageBucketObject.StorageBucketObject(this, "voicemail-handler-code", {
 			name: `${config.environment}-voicemail-handler/${Date.now()}.zip`,
@@ -94,7 +106,8 @@ class VoicemailServiceStack extends TerraformStack {
 					VOIP_MS_API_URL: "https://voip.ms/api/v1/rest.php",
 					VOIP_MS_API_USERNAME: "contact@shawnstawiarski.com",
 					VOIP_MS_TARGET_MAILBOX_ID: "19085",
-					ENVIRONMENT: config.environment
+					ENVIRONMENT: config.environment,
+					VOICEMAIL_OUTPUT_BUCKET: voicemailOutputBucket.name
 				}
 			}
 		});
@@ -117,7 +130,7 @@ class VoicemailServiceStack extends TerraformStack {
 
 function synth() {
 	const app = new App();
-	const stack = new VoicemailServiceStack(app, "infrastructure", { environment, region: process.env.GCP_REGION ?? "us-central1", fnArtifactBucket: functionArtifactBucketName });
+	const stack = new VoicemailServiceStack(app, "infrastructure", { environment, region: process.env.GCP_REGION ?? "us-central1", fnArtifactBucket: functionArtifactBucketName, voicemailBucketSuffix });
 
 	new GcsBackend(stack, {
 		bucket: tfBucket,
@@ -137,6 +150,7 @@ if (!isCI) {
 			functionArtifactBucketName = get(environment === "dev" ? "DEV_FUNCTION_ARTIFACT_BUCKET_NAME" : "PROD_FUNCTION_ARTIFACT_BUCKET_NAME")
 				.required()
 				.asString();
+			voicemailBucketSuffix = get("VOICEMAIL_OUTPUT_BUCKET_SUFFIX").required().asString();
 			synth();
 		});
 } else {
