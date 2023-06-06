@@ -4,7 +4,7 @@ import type { ProcessedVoicemail } from "../../src/types/data/ProcessedVoicemail
 import type { IAlertingService } from "../../src/types/services/IAlertingService";
 import type { ISpeechService } from "../../src/types/services/ISpeechService";
 import type { IVoicemailService } from "../../src/types/services/IVoicemailService";
-import Constants from "../constants";
+import { ApplicationConstants, GeneralConstants } from "../constants";
 import type { Voicemail } from "../types/data/voip/Voicemail";
 import type { IVOIPClient } from "../types/services/clients/IVOIPClient";
 import type { ILogger } from "../types/utils/ILogger";
@@ -53,7 +53,7 @@ export class VoicemailService implements IVoicemailService {
 	}
 
 	private async processVoicemail(message: Voicemail): Promise<[CloudStorageFileInput, CloudStorageFileInput]> {
-		const messageData = await this.#voipService.getVoicemailFile(TARGET_MAILBOX_ID, message.folder, message.message_num, Constants.AUDIO_FILE_EXTENSION);
+		const messageData = await this.#voipService.getVoicemailFile(TARGET_MAILBOX_ID, message.folder, message.message_num, ApplicationConstants.AUDIO_FILE_EXTENSION);
 		const transcribedText = await this.#speechService.transcribe(messageData);
 		const callerID = message.callerid.split(" ")[0];
 
@@ -72,14 +72,14 @@ export class VoicemailService implements IVoicemailService {
 			{
 				destinationBucket: VOICEMAIL_OUTPUT_BUCKET,
 				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${message.message_num}_audio.${
-					Constants.AUDIO_FILE_EXTENSION
+					ApplicationConstants.AUDIO_FILE_EXTENSION
 				}`,
-				data: Buffer.from(messageData, "base64")
+				data: Buffer.from(messageData, GeneralConstants.BUFFER_FORMATS.BASE_64)
 			},
 			{
 				destinationBucket: VOICEMAIL_OUTPUT_BUCKET,
 				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${message.message_num}_transcription.${
-					Constants.TRANSCRIPTION_FILE_EXTENSION
+					ApplicationConstants.TRANSCRIPTION_FILE_EXTENSION
 				}`,
 				data: transcribedText
 			}
