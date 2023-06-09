@@ -2,8 +2,8 @@ import type { AxiosInstance } from "axios";
 import type { RestoreFn } from "mocked-env";
 import mockEnv from "mocked-env";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { GeneralConstants } from "../../../../src/constants";
 import type { ILogger } from "../../../../src/types/utils/ILogger";
-import { MimeTypes } from "../../../../src/types/utils/MimeTypes";
 import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager";
 import { PushNotificationRequestFactory } from "../../../utilities/factories/PushNotificationRequest";
 
@@ -64,7 +64,7 @@ describe("PushNotificationClient Test Suite", () => {
 		expect(mockPostFn).toHaveBeenLastCalledWith(
 			mockPushoverUrl,
 			expect.any(FormData),
-			expect.objectContaining({ headers: expect.objectContaining({ "Content-Type": MimeTypes.FORM_DATA }) })
+			expect.objectContaining({ headers: expect.objectContaining({ "Content-Type": GeneralConstants.MIME_TYPES.FORM_DATA }) })
 		);
 		expect(mockGetSecretValue).toHaveBeenCalledTimes(1);
 		expect(mockGetSecretValue).toHaveBeenLastCalledWith(mockSecretName);

@@ -1,6 +1,7 @@
 import type { SpeechClient } from "@google-cloud/speech";
 import type { google } from "@google-cloud/speech/build/protos/protos";
 import type { ISpeechService } from "../../src/types/services/ISpeechService";
+import { GeneralConstants } from "../constants";
 import type { ILogger } from "../types/utils/ILogger";
 
 export class SpeechService implements ISpeechService {
@@ -19,8 +20,8 @@ export class SpeechService implements ISpeechService {
 					content: input
 				},
 				config: {
-					encoding: "LINEAR16",
-					languageCode: "en-US"
+					encoding: GeneralConstants.AUDIO_ENCODING_FORMATS.LINEAR16,
+					languageCode: GeneralConstants.LANGUAGE_CODES.US_ENGLISH
 				}
 			});
 
@@ -35,7 +36,7 @@ export class SpeechService implements ISpeechService {
 		if (!input.results) {
 			throw new Error();
 		}
-		
+
 		return input.results.map((result) => result.alternatives?.[0].transcript).join("\n");
 	}
 }

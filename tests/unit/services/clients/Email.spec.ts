@@ -4,7 +4,7 @@ import mockEnv from "mocked-env";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager";
 import type { ILogger } from "../../../../src/types/utils/ILogger";
-import { MimeTypes } from "../../../../src/types/utils/MimeTypes";
+import { GeneralConstants } from "../../../../src/constants";
 import { EmailRequestFactory } from "../../../utilities/factories/EmailRequest";
 
 describe("EmailClient Test Suite", () => {
@@ -62,7 +62,7 @@ describe("EmailClient Test Suite", () => {
 			expect.objectContaining({
 				content: [
 					{
-						type: MimeTypes.PLAIN_TEXT,
+						type: GeneralConstants.MIME_TYPES.PLAIN_TEXT,
 						value: mockEmail.content
 					}
 				]
