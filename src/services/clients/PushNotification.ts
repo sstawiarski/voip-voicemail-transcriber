@@ -1,10 +1,10 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
+import { GeneralConstants } from "../../constants";
 import type { PushNotificationRequest } from "../../types/data/PushNotificationRequest";
 import type { IPushNotificationClient } from "../../types/services/clients/IPushNotificationClient";
 import type { ILogger } from "../../types/utils/ILogger";
 import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
-import { GeneralConstants } from "../../constants";
 
 const PUSHOVER_API_URL = env.get("PUSHOVER_API_URL").required().asString();
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();

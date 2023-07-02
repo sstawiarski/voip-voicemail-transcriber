@@ -2,9 +2,9 @@ import type { AxiosInstance } from "axios";
 import type { RestoreFn } from "mocked-env";
 import mockEnv from "mocked-env";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager";
-import type { ILogger } from "../../../../src/types/utils/ILogger";
 import { GeneralConstants } from "../../../../src/constants";
+import type { ILogger } from "../../../../src/types/utils/ILogger";
+import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager";
 import { EmailRequestFactory } from "../../../utilities/factories/EmailRequest";
 
 describe("EmailClient Test Suite", () => {
@@ -27,7 +27,7 @@ describe("EmailClient Test Suite", () => {
 	});
 
 	afterEach(() => {
-        /* Reset modules so saved globals (e.g. cached secret value) do not conflict between tests */
+		/* Reset modules so saved globals (e.g. cached secret value) do not conflict between tests */
 		vi.resetModules();
 
 		loggerInfoFn.mockClear();
