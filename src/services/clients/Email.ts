@@ -1,10 +1,10 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
+import { GeneralConstants } from "../../constants";
 import type { EmailRequest } from "../../types/data/EmailRequest";
 import type { IEmailClient } from "../../types/services/clients/IEmailClient";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 import type { ILogger } from "../../types/utils/ILogger";
-import { MimeTypes } from "../../types/utils/MimeTypes";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 
 const SENDGRID_API_URL = env.get("SENDGRID_API_URL").required().asString();
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();
@@ -54,7 +54,7 @@ export class EmailClient implements IEmailClient {
 					subject
 				}
 			],
-			content: [{ type: MimeTypes.PLAIN_TEXT, value: content }],
+			content: [{ type: GeneralConstants.MIME_TYPES.PLAIN_TEXT, value: content }],
 			from: { email: SENDER_EMAIL, name: SENDER_NAME }
 		};
 	}

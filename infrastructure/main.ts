@@ -130,7 +130,12 @@ class VoicemailServiceStack extends TerraformStack {
 
 function synth() {
 	const app = new App();
-	const stack = new VoicemailServiceStack(app, "infrastructure", { environment, region: process.env.GCP_REGION ?? "us-central1", fnArtifactBucket: functionArtifactBucketName, voicemailBucketSuffix });
+	const stack = new VoicemailServiceStack(app, "infrastructure", {
+		environment,
+		region: process.env.GCP_REGION ?? "us-central1",
+		fnArtifactBucket: functionArtifactBucketName,
+		voicemailBucketSuffix
+	});
 
 	new GcsBackend(stack, {
 		bucket: tfBucket,

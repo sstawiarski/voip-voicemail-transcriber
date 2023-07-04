@@ -116,5 +116,5 @@ describe("SecretsManager Test Suite", () => {
 			expect(loggerError).toHaveBeenCalledTimes(1);
 		}
 		expect(mockAccessSecretFn).toHaveBeenCalledTimes(1);
-	})
+	});
 });

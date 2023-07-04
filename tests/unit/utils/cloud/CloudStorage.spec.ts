@@ -63,7 +63,7 @@ describe("CloudStorage Test Suite", () => {
 		});
 	});
 
-    describe("saveFiles Test Suite", () => {
+	describe("saveFiles Test Suite", () => {
 		it("should successfully save multiple files", async () => {
 			const mockData = "data";
 			const mockDestinationBucket = "test_bucket";
@@ -79,7 +79,10 @@ describe("CloudStorage Test Suite", () => {
 
 			const cloudStorage = new CloudStorage({ bucket: mockBucketFn } as any, {} as any);
 
-			await cloudStorage.saveFiles([{ data: mockData, destinationBucket: mockDestinationBucket, destinationFileName: mockFilename }, { data: mockData, destinationBucket: mockDestinationBucket, destinationFileName: mockFilename }]);
+			await cloudStorage.saveFiles([
+				{ data: mockData, destinationBucket: mockDestinationBucket, destinationFileName: mockFilename },
+				{ data: mockData, destinationBucket: mockDestinationBucket, destinationFileName: mockFilename }
+			]);
 
 			expect(mockBucketFn).toHaveBeenCalledTimes(2);
 			expect(mockBucketFn).toHaveBeenLastCalledWith(mockDestinationBucket);

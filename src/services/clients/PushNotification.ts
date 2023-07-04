@@ -1,10 +1,10 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
+import { GeneralConstants } from "../../constants";
 import type { PushNotificationRequest } from "../../types/data/PushNotificationRequest";
 import type { IPushNotificationClient } from "../../types/services/clients/IPushNotificationClient";
 import type { ILogger } from "../../types/utils/ILogger";
 import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
-import { MimeTypes } from "../../types/utils/MimeTypes";
 
 const PUSHOVER_API_URL = env.get("PUSHOVER_API_URL").required().asString();
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();
@@ -15,17 +15,12 @@ let PUSHOVER_USER_KEY: string;
 export class PushNotificationClient implements IPushNotificationClient {
 	#axios: AxiosInstance;
 	#logger: ILogger;
-	#baseFormData: FormData;
 	#secretsManager: ISecretsManager;
 
 	constructor(axiosInstance: AxiosInstance, secretsManager: ISecretsManager, logger: ILogger) {
 		this.#axios = axiosInstance;
 		this.#secretsManager = secretsManager;
 		this.#logger = logger;
-
-		this.#baseFormData = new FormData();
-		this.#baseFormData.append("token", PUSHOVER_APP_KEY!);
-		this.#baseFormData.append("user", PUSHOVER_USER_KEY!);
 	}
 
 	public async sendPush(input: PushNotificationRequest): Promise<void> {
@@ -40,7 +35,7 @@ export class PushNotificationClient implements IPushNotificationClient {
 		try {
 			await this.#axios.post(PUSHOVER_API_URL, formData, {
 				headers: {
-					"Content-Type": MimeTypes.FORM_DATA
+					"Content-Type": GeneralConstants.MIME_TYPES.FORM_DATA
 				}
 			});
 		} catch (error) {
