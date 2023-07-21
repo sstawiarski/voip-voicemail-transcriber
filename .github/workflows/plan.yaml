@@ -59,6 +59,9 @@ jobs:
                   TF_BUCKET: ${{ secrets[env.tf_bucket_secret_name] }}
                   FN_ARTIFACT_BUCKET_NAME: ${{ secrets[env.fn_artifact_bucket_name] }}
                   VOICEMAIL_OUTPUT_BUCKET_SUFFIX: ${{ secrets.VOICEMAIL_OUTPUT_BUCKET_SUFFIX }}
+                  ALERT_SENDER_EMAIL: ${{ secrets.ALERT_SENDER_EMAIL }}
+                  VOIP_MS_API_USERNAME: ${{ secrets.VOIP_MS_API_USERNAME }}
+                  VOIP_MS_TARGET_MAILBOX_ID: ${{ secrets.VOIP_MS_TARGET_MAILBOX_ID }}
 
             - name: Run unit tests
               run: npm test
@@ -72,6 +75,9 @@ jobs:
                   TF_BUCKET: ${{ secrets[env.tf_bucket_secret_name] }}
                   FN_ARTIFACT_BUCKET_NAME: ${{ secrets[env.fn_artifact_bucket_name] }}
                   VOICEMAIL_OUTPUT_BUCKET_SUFFIX: ${{ secrets.VOICEMAIL_OUTPUT_BUCKET_SUFFIX }}
+                  ALERT_SENDER_EMAIL: ${{ secrets.ALERT_SENDER_EMAIL }}
+                  VOIP_MS_API_USERNAME: ${{ secrets.VOIP_MS_API_USERNAME }}
+                  VOIP_MS_TARGET_MAILBOX_ID: ${{ secrets.VOIP_MS_TARGET_MAILBOX_ID }}
               continue-on-error: true
 
             - uses: actions/github-script@v5
