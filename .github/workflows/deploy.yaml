@@ -51,7 +51,7 @@ jobs:
                   cache: "npm"
 
             - name: Install cdktf
-              run: npm install -g cdktf-cli
+              run: npm install -g cdktf-cli@0.17.1
 
             - name: Install Terraform
               uses: hashicorp/setup-terraform@v2
