@@ -17,12 +17,24 @@ const isCI = require("is-ci");
 
 const environment = get("ENVIRONMENT").default("dev").asEnum(["dev", "prod"]);
 let voicemailBucketSuffix = get("VOICEMAIL_OUTPUT_BUCKET_SUFFIX").default("").asString();
-
 let functionArtifactBucketName = get("FN_ARTIFACT_BUCKET_NAME").default("").asString();
 let tfBucket = get("TF_BUCKET").default("").asString();
+let alertSenderEmail = get("ALERT_SENDER_EMAIL").default("test@test.com").asEmailString();
+let voipAPIUsername = get("VOIP_MS_API_USERNAME").default("").asString();
+let targetVoipMailboxID = get("VOIP_MS_TARGET_MAILBOX_ID").default("").asString();
+
+interface VoicemailServiceStackConfig {
+	environment: string;
+	region: string;
+	fnArtifactBucket: string;
+	voicemailBucketSuffix: string;
+	alertSenderEmail: string;
+	voipAPIUsername: string;
+	targetVoipMailboxID: string;
+}
 
 class VoicemailServiceStack extends TerraformStack {
-	constructor(scope: Construct, id: string, config: { environment: string; region: string; fnArtifactBucket: string; voicemailBucketSuffix: string }) {
+	constructor(scope: Construct, id: string, config: VoicemailServiceStackConfig) {
 		super(scope, id);
 
 		const PROJECT_ID = `${config.environment}-voicemail-service`;
@@ -99,13 +111,13 @@ class VoicemailServiceStack extends TerraformStack {
 				environmentVariables: {
 					SENDGRID_API_URL: "https://api.sendgrid.com/v3/mail/send",
 					EMAIL_SENDER_NAME: "Voicemails",
-					SENDER_EMAIL: "voicemails@shawnstawiarski.com",
+					SENDER_EMAIL: config.alertSenderEmail,
 					PUSHOVER_API_URL: "https://api.pushover.net/1/messages.json",
 					LOG_LEVEL: config.environment === "dev" ? "debug" : "info",
 					SECRET_NAME: `${secrets.name}/versions/latest`,
 					VOIP_MS_API_URL: "https://voip.ms/api/v1/rest.php",
-					VOIP_MS_API_USERNAME: "contact@shawnstawiarski.com",
-					VOIP_MS_TARGET_MAILBOX_ID: "19085",
+					VOIP_MS_API_USERNAME: config.voipAPIUsername,
+					VOIP_MS_TARGET_MAILBOX_ID: config.targetVoipMailboxID,
 					ENVIRONMENT: config.environment,
 					VOICEMAIL_OUTPUT_BUCKET: voicemailOutputBucket.name
 				}
@@ -134,7 +146,10 @@ function synth() {
 		environment,
 		region: process.env.GCP_REGION ?? "us-central1",
 		fnArtifactBucket: functionArtifactBucketName,
-		voicemailBucketSuffix
+		voicemailBucketSuffix,
+		alertSenderEmail,
+		targetVoipMailboxID,
+		voipAPIUsername
 	});
 
 	new GcsBackend(stack, {
@@ -156,6 +171,10 @@ if (!isCI) {
 				.required()
 				.asString();
 			voicemailBucketSuffix = get("VOICEMAIL_OUTPUT_BUCKET_SUFFIX").required().asString();
+			targetVoipMailboxID = get("VOIP_MS_TARGET_MAILBOX_ID").required().asString();
+			alertSenderEmail = get("ALERT_SENDER_EMAIL").required().asEmailString();
+			voipAPIUsername = get("VOIP_MS_API_USERNAME").required().asString();
+
 			synth();
 		});
 } else {
