@@ -1,19 +1,21 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
+import { VoipConstants } from "../../constants";
 import type { Voicemail } from "../../types/data/voip/Voicemail";
 import type { VoicemailBox } from "../../types/data/voip/VoicemailBox";
 import type { VoicemailFile } from "../../types/data/voip/VoicemailFile";
-import type { IVOIPClient } from "../../types/services/clients/IVOIPClient";
+import type { AudioFormat, IVOIPClient } from "../../types/services/clients/IVOIPClient";
 import type { ILogger } from "../../types/utils/ILogger";
 import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
 
+const { VOIP_MS_METHODS, VOIP_MS_STATUSES, MAILBOXES } = VoipConstants;
 const VOIP_MS_API_USERNAME = env.get("VOIP_MS_API_USERNAME").required().asEmailString();
 const VOIP_MS_API_URL = env.get("VOIP_MS_API_URL").required().asUrlString();
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();
 
 let API_PASSWORD: string;
 
-type APIWrapper<T extends Record<string, any> = {}> = ({ status: "success" } & T) | { status: "failure" };
+type APIWrapper<T extends Record<string, any> = {}> = ({ status: typeof VOIP_MS_STATUSES.SUCCESS } & T) | { status: typeof VOIP_MS_STATUSES.FAILURE };
 
 export class VOIPClient implements IVOIPClient {
 	#axios: AxiosInstance;
@@ -34,13 +36,13 @@ export class VOIPClient implements IVOIPClient {
 				params: {
 					api_username: VOIP_MS_API_USERNAME,
 					api_password: password,
-					method: "getVoicemails"
+					method: VOIP_MS_METHODS.GET_VOICEMAIL_BOXES
 				}
 			});
 
 			this.#logger.debug("Received response from VoIP API getting voicemail boxes", { ...data });
 
-			if (data.status !== "success") {
+			if (data.status !== VOIP_MS_STATUSES.SUCCESS) {
 				throw new Error();
 			}
 
@@ -59,20 +61,18 @@ export class VOIPClient implements IVOIPClient {
 				params: {
 					api_username: VOIP_MS_API_USERNAME,
 					api_password: password,
-					method: "getVoicemailMessages",
+					method: VOIP_MS_METHODS.GET_MESSAGES,
 					mailbox: inboxID,
-					folder: "INBOX"
+					folder: MAILBOXES.INBOX
 				}
 			});
 
 			this.#logger.debug("Received response from VOIP service getting voicemails", { ...data });
 
-			if (data.status !== "success" && data.status !== "no_messages") {
-				throw new Error();
-			}
+			if (data.status !== VOIP_MS_STATUSES.SUCCESS) {
+				if (data.status === VOIP_MS_STATUSES.NO_MESSAGES) return [];
 
-			if (data.status === "no_messages") {
-				return [];
+				throw new Error();
 			}
 
 			return data.messages;
@@ -82,7 +82,7 @@ export class VOIPClient implements IVOIPClient {
 		}
 	}
 
-	public async getVoicemailFile(inboxID: string, folderName: string, messageID: string, format: "mp3" | "wav"): Promise<string> {
+	public async getVoicemailFile(inboxID: string, folderName: string, messageID: string, format: AudioFormat): Promise<string> {
 		const password = await this.getAPIPassword();
 
 		try {
@@ -90,7 +90,7 @@ export class VOIPClient implements IVOIPClient {
 				params: {
 					api_username: VOIP_MS_API_USERNAME,
 					api_password: password,
-					method: "getVoicemailMessageFile",
+					method: VOIP_MS_METHODS.GET_VOICEMAIL_FILE,
 					mailbox: inboxID,
 					folder: folderName,
 					message_num: messageID,
@@ -100,7 +100,7 @@ export class VOIPClient implements IVOIPClient {
 
 			this.#logger.debug("Received response getting voicemail file", { ...data });
 
-			if (data.status !== "success") {
+			if (data.status !== VOIP_MS_STATUSES.SUCCESS) {
 				throw new Error();
 			}
 
@@ -119,15 +119,15 @@ export class VOIPClient implements IVOIPClient {
 				params: {
 					api_username: VOIP_MS_API_USERNAME,
 					api_password: password,
-					method: "markListenedVoicemailMessage",
+					method: VOIP_MS_METHODS.MARK_LISTENED,
 					mailbox: inboxID,
 					folder: folderName,
 					message_num: messageID,
-					listened: "yes"
+					listened: VOIP_MS_STATUSES.YES
 				}
 			});
 
-			if (data.status !== "success") {
+			if (data.status !== VOIP_MS_STATUSES.SUCCESS) {
 				throw new Error();
 			}
 
