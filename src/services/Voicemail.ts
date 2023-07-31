@@ -4,7 +4,7 @@ import type { ProcessedVoicemail } from "../../src/types/data/ProcessedVoicemail
 import type { IAlertingService } from "../../src/types/services/IAlertingService";
 import type { ISpeechService } from "../../src/types/services/ISpeechService";
 import type { IVoicemailService } from "../../src/types/services/IVoicemailService";
-import { ApplicationConstants, GeneralConstants } from "../constants";
+import { ApplicationConstants, GeneralConstants, VoipConstants } from "../constants";
 import type { Voicemail } from "../types/data/voip/Voicemail";
 import type { IVOIPClient } from "../types/services/clients/IVOIPClient";
 import type { ILogger } from "../types/utils/ILogger";
@@ -37,7 +37,7 @@ export class VoicemailService implements IVoicemailService {
 			return 0;
 		}
 
-		const unreadMessages = messages.filter((message) => message.listened === "no");
+		const unreadMessages = messages.filter((message) => message.listened === VoipConstants.VOIP_MS_STATUSES.NO);
 		if (!unreadMessages.length) {
 			this.#logger.info("No unread messages; returning...");
 			return 0;
@@ -88,7 +88,7 @@ export class VoicemailService implements IVoicemailService {
 
 	private async sendAlerts(input: ProcessedVoicemail): Promise<void> {
 		await this.#alertingService.sendPushNotification({
-			title: "New voicemail received from " + input.phoneNumber,
+			title: `New voicemail received from ${input.phoneNumber}`,
 			content: input.transcribedText
 		});
 	}
