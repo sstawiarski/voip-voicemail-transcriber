@@ -37,6 +37,8 @@ class VoicemailServiceStack extends TerraformStack {
 	constructor(scope: Construct, id: string, config: VoicemailServiceStackConfig) {
 		super(scope, id);
 
+		console.log(config.fnArtifactBucket)
+
 		const PROJECT_ID = `${config.environment}-voicemail-service`;
 
 		new provider.GoogleProvider(this, "google-provider", {
