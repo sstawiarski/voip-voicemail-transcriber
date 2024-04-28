@@ -1,2 +1,2 @@
-export { authWrapper } from "./authWrapper";
-export { errorWrapper } from "./errorWrapper";
+export { authWrapper } from "./authWrapper.js";
+export { errorWrapper } from "./errorWrapper.js";

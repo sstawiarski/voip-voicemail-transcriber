@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
-import { VoipConstants } from "../../constants";
+import { VoipConstants } from "../../constants/index.js";
 import type { Voicemail } from "../../types/data/voip/Voicemail";
 import type { VoicemailBox } from "../../types/data/voip/VoicemailBox";
 import type { VoicemailFile } from "../../types/data/voip/VoicemailFile";

@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
-import { GeneralConstants } from "../../constants";
+import { GeneralConstants } from "../../constants/index.js";
 import type { EmailRequest } from "../../types/data/EmailRequest";
 import type { IEmailClient } from "../../types/services/clients/IEmailClient";
 import type { ILogger } from "../../types/utils/ILogger";
