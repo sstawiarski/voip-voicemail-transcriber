@@ -4,7 +4,7 @@ import type { ProcessedVoicemail } from "../../src/types/data/ProcessedVoicemail
 import type { IAlertingService } from "../../src/types/services/IAlertingService";
 import type { ISpeechService } from "../../src/types/services/ISpeechService";
 import type { IVoicemailService } from "../../src/types/services/IVoicemailService";
-import { ApplicationConstants, GeneralConstants, VoipConstants } from "../constants";
+import { ApplicationConstants, GeneralConstants, VoipConstants } from "../constants/index.js";
 import type { Voicemail } from "../types/data/voip/Voicemail";
 import type { IVOIPClient } from "../types/services/clients/IVOIPClient";
 import type { ILogger } from "../types/utils/ILogger";

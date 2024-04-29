@@ -15,3 +15,4 @@ lib/
 /functions.zip
 /infrastructure/.env
 /coverage
+/.env

@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
-import { GeneralConstants } from "../../constants";
+import { GeneralConstants } from "../../constants/index.js";
 import type { PushNotificationRequest } from "../../types/data/PushNotificationRequest";
 import type { IPushNotificationClient } from "../../types/services/clients/IPushNotificationClient";
 import type { ILogger } from "../../types/utils/ILogger";
