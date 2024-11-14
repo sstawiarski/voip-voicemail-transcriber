@@ -2,10 +2,10 @@ import type { AxiosInstance } from "axios";
 import type { RestoreFn } from "mocked-env";
 import mockEnv from "mocked-env";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { GeneralConstants } from "../../../../src/constants";
-import type { ILogger } from "../../../../src/types/utils/ILogger";
-import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager";
-import { EmailRequestFactory } from "../../../utilities/factories/EmailRequest";
+import { GeneralConstants } from "../../../../src/constants/index.js";
+import type { ILogger } from "../../../../src/types/utils/ILogger.ts";
+import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager.ts";
+import { EmailRequestFactory } from "../../../utilities/factories/EmailRequest.js";
 
 describe("EmailClient Test Suite", () => {
 	let restoreFn: RestoreFn | undefined;
@@ -20,7 +20,7 @@ describe("EmailClient Test Suite", () => {
 	} as unknown as ILogger;
 
 	beforeAll(() => {
-		restoreFn = mockEnv({
+		restoreFn = (mockEnv as any)({
 			SENDGRID_API_URL: mockSendGridUrl,
 			SECRET_NAME: mockSecretName
 		});
@@ -40,7 +40,7 @@ describe("EmailClient Test Suite", () => {
 
 	it("should successfully call SendGrid API to send email", async () => {
 		/* Dynamic import to ensure file globals are set by the mock env */
-		const { EmailClient } = await import("../../../../src/services/clients/Email");
+		const { EmailClient } = await import("../../../../src/services/clients/Email.js");
 
 		const mockPostFn = vi.fn().mockResolvedValue(void 0);
 		const mockAxios = {
@@ -76,7 +76,7 @@ describe("EmailClient Test Suite", () => {
 	it("should throw error when POST request fails", async () => {
 		expect.assertions(2);
 
-		const { EmailClient } = await import("../../../../src/services/clients/Email");
+		const { EmailClient } = await import("../../../../src/services/clients/Email.js");
 
 		const mockError = new Error("test");
 		const mockPostFn = vi.fn().mockRejectedValue(mockError);

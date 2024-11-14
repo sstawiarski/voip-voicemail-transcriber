@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { CloudStorage } from "../../../../src/utils/cloud/CloudStorage";
+import { CloudStorage } from "../../../../src/utils/cloud/CloudStorage.js";
 
 describe("CloudStorage Test Suite", () => {
 	describe("saveFile Test Suite", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { SecretsManager } from "../../../../src/utils/cloud/SecretsManager";
+import { SecretsManager } from "../../../../src/utils/cloud/SecretsManager.js";
 
 describe("SecretsManager Test Suite", () => {
 	it("should successfully get and parse a string secret value to JSON", async () => {

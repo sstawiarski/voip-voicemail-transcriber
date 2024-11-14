@@ -1,14 +1,14 @@
 import { format, parse } from "date-fns";
 import env from "env-var";
-import type { ProcessedVoicemail } from "../../src/types/data/ProcessedVoicemail";
-import type { IAlertingService } from "../../src/types/services/IAlertingService";
-import type { ISpeechService } from "../../src/types/services/ISpeechService";
-import type { IVoicemailService } from "../../src/types/services/IVoicemailService";
+import type { ProcessedVoicemail } from "../../src/types/data/ProcessedVoicemail.ts";
+import type { IAlertingService } from "../../src/types/services/IAlertingService.ts";
+import type { ISpeechService } from "../../src/types/services/ISpeechService.ts";
+import type { IVoicemailService } from "../../src/types/services/IVoicemailService.ts";
 import { ApplicationConstants, GeneralConstants, VoipConstants } from "../constants/index.js";
-import type { Voicemail } from "../types/data/voip/Voicemail";
-import type { IVOIPClient } from "../types/services/clients/IVOIPClient";
-import type { ILogger } from "../types/utils/ILogger";
-import type { CloudStorageFileInput, ICloudStorage } from "../types/utils/cloud/ICloudStorage";
+import type { Voicemail } from "../types/data/voip/Voicemail.ts";
+import type { IVOIPClient } from "../types/services/clients/IVOIPClient.ts";
+import type { ILogger } from "../types/utils/ILogger.ts";
+import type { CloudStorageFileInput, ICloudStorage } from "../types/utils/cloud/ICloudStorage.ts";
 
 const TARGET_MAILBOX_ID = env.get("VOIP_MS_TARGET_MAILBOX_ID").required().asString();
 const VOICEMAIL_OUTPUT_BUCKET = env.get("VOICEMAIL_OUTPUT_BUCKET").required().asString();

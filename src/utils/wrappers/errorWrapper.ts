@@ -1,5 +1,5 @@
 import { root, tokens } from "../../root.js";
-import type { WrapperFn } from "../../types/utils/WrapperFn";
+import type { WrapperFn } from "../../types/utils/WrapperFn.ts";
 
 export const errorWrapper: WrapperFn = (fn) => async (req, res) => {
 	try {

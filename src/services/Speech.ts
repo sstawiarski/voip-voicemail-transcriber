@@ -1,8 +1,8 @@
 import type { SpeechClient } from "@google-cloud/speech";
-import type { google } from "@google-cloud/speech/build/protos/protos";
-import type { ISpeechService } from "../../src/types/services/ISpeechService";
+import type { google } from "@google-cloud/speech/build/protos/protos.js";
+import type { ISpeechService } from "../../src/types/services/ISpeechService.ts";
 import { GeneralConstants } from "../constants/index.js";
-import type { ILogger } from "../types/utils/ILogger";
+import type { ILogger } from "../types/utils/ILogger.ts";
 
 export class SpeechService implements ISpeechService {
 	#logger: ILogger;

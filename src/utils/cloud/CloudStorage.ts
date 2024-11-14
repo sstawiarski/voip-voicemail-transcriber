@@ -1,6 +1,6 @@
 import type { Storage } from "@google-cloud/storage";
-import type { ILogger } from "../../types/utils/ILogger";
-import type { CloudStorageFileInput, ICloudStorage } from "../../types/utils/cloud/ICloudStorage";
+import type { ILogger } from "../../types/utils/ILogger.ts";
+import type { CloudStorageFileInput, ICloudStorage } from "../../types/utils/cloud/ICloudStorage.ts";
 
 export class CloudStorage implements ICloudStorage {
 	#storage: Storage;

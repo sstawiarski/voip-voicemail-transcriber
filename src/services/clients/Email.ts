@@ -1,10 +1,10 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
 import { GeneralConstants } from "../../constants/index.js";
-import type { EmailRequest } from "../../types/data/EmailRequest";
-import type { IEmailClient } from "../../types/services/clients/IEmailClient";
-import type { ILogger } from "../../types/utils/ILogger";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
+import type { EmailRequest } from "../../types/data/EmailRequest.ts";
+import type { IEmailClient } from "../../types/services/clients/IEmailClient.ts";
+import type { ILogger } from "../../types/utils/ILogger.ts";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager.ts";
 
 const SENDGRID_API_URL = env.get("SENDGRID_API_URL").required().asString();
 const SECRET_NAME = env.get("SECRET_NAME").required().asString();
