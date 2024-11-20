@@ -20,7 +20,13 @@ export class VoicemailService implements IVoicemailService {
 	#cloudStorage: ICloudStorage;
 	#logger: ILogger;
 
-	constructor(speechService: ISpeechService, alertingService: IAlertingService, voipService: IVOIPClient, cloudStorage: ICloudStorage, logger: ILogger) {
+	constructor(
+		speechService: ISpeechService,
+		alertingService: IAlertingService,
+		voipService: IVOIPClient,
+		cloudStorage: ICloudStorage,
+		logger: ILogger
+	) {
 		this.#speechService = speechService;
 		this.#alertingService = alertingService;
 		this.#voipService = voipService;
@@ -53,7 +59,12 @@ export class VoicemailService implements IVoicemailService {
 	}
 
 	private async processVoicemail(message: Voicemail): Promise<[CloudStorageFileInput, CloudStorageFileInput]> {
-		const messageData = await this.#voipService.getVoicemailFile(TARGET_MAILBOX_ID, message.folder, message.message_num, ApplicationConstants.AUDIO_FILE_EXTENSION);
+		const messageData = await this.#voipService.getVoicemailFile(
+			TARGET_MAILBOX_ID,
+			message.folder,
+			message.message_num,
+			ApplicationConstants.AUDIO_FILE_EXTENSION
+		);
 		const transcribedText = await this.#speechService.transcribe(messageData);
 		const callerID = message.callerid.split(" ")[0];
 
@@ -71,16 +82,16 @@ export class VoicemailService implements IVoicemailService {
 		return [
 			{
 				destinationBucket: VOICEMAIL_OUTPUT_BUCKET,
-				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${message.message_num}_audio.${
-					ApplicationConstants.AUDIO_FILE_EXTENSION
-				}`,
+				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${
+					message.message_num
+				}_audio.${ApplicationConstants.AUDIO_FILE_EXTENSION}`,
 				data: Buffer.from(messageData, GeneralConstants.BUFFER_FORMATS.BASE_64)
 			},
 			{
 				destinationBucket: VOICEMAIL_OUTPUT_BUCKET,
-				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${message.message_num}_transcription.${
-					ApplicationConstants.TRANSCRIPTION_FILE_EXTENSION
-				}`,
+				destinationFileName: `${filePrefixDate}/${messageDate.getTime()}_from_${callerID}_${message.mailbox}_${
+					message.message_num
+				}_transcription.${ApplicationConstants.TRANSCRIPTION_FILE_EXTENSION}`,
 				data: transcribedText
 			}
 		];

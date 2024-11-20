@@ -6,7 +6,7 @@ import axios from "axios";
 import env from "env-var";
 import { createContainer } from "iti";
 import winston, { createLogger, format } from "winston";
-import { ApplicationConstants } from "./constants/index.js";
+import { ApplicationConstants, GeneralConstants } from "./constants/index.js";
 import { AlertingService } from "./services/Alerting.js";
 import { SpeechService } from "./services/Speech.js";
 import { VoicemailService } from "./services/Voicemail.js";
@@ -17,8 +17,12 @@ import { Logger } from "./utils/Logger.js";
 import { CloudStorage } from "./utils/cloud/CloudStorage.js";
 import { SecretsManager } from "./utils/cloud/SecretsManager.js";
 
-const ENVIRONMENT = env.get("ENVIRONMENT").default("dev").asEnum(["dev", "prod", "test"]);
-const LOG_LEVEL = env.get("LOG_LEVEL").default("info").asString();
+const ENVIRONMENT = env
+	.get("ENVIRONMENT")
+	.default(GeneralConstants.ENVIRONMENT.DEVELOPMENT)
+	.asEnum(Object.values(GeneralConstants.ENVIRONMENT));
+
+const LOG_LEVEL = env.get("LOG_LEVEL").default(GeneralConstants.LOG_LEVEL.INFO).asString();
 
 export const root = createContainer()
 	.add({
@@ -34,7 +38,10 @@ export const root = createContainer()
 			return createLogger({
 				level: LOG_LEVEL,
 				format: format.combine(format.errors({ stack: true }), format.json()),
-				transports: ENVIRONMENT === "dev" ? [new winston.transports.Console(), loggingWinston] : [loggingWinston]
+				transports:
+					ENVIRONMENT !== GeneralConstants.ENVIRONMENT.PRODUCTION
+						? [new winston.transports.Console(), loggingWinston]
+						: [loggingWinston]
 			});
 		},
 		googleSecretsClient: () => new SecretManagerServiceClient(),

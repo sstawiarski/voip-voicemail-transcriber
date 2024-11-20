@@ -37,5 +37,17 @@ export const GeneralConstants = Object.freeze({
 		PLAIN_TEXT: "text/plain",
 		FORM_DATA: "multipart/form-data",
 		JSON: "application/json"
+	}),
+	ENVIRONMENT: Object.freeze({
+		DEVELOPMENT: "dev",
+		PRODUCTION: "prod",
+		TEST: "test",
+		LOCAL: "local"
+	}),
+	LOG_LEVEL: Object.freeze({
+		INFO: "info",
+		ERROR: "error",
+		DEBUG: "debug",
+		WARN: "warn"
 	})
 });

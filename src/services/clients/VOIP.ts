@@ -15,7 +15,9 @@ const SECRET_NAME = env.get("SECRET_NAME").required().asString();
 
 let API_PASSWORD: string;
 
-type APIWrapper<T extends Record<string, any> = {}> = ({ status: typeof VOIP_MS_STATUSES.SUCCESS } & T) | { status: typeof VOIP_MS_STATUSES.FAILURE };
+type APIWrapper<T extends Record<string, any> = {}> =
+	| ({ status: typeof VOIP_MS_STATUSES.SUCCESS } & T)
+	| { status: typeof VOIP_MS_STATUSES.FAILURE };
 
 export class VOIPClient implements IVOIPClient {
 	#axios: AxiosInstance;

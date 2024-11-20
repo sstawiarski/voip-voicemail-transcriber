@@ -167,7 +167,9 @@ if (!isCI) {
 			tfBucket = get(environment === "dev" ? "DEV_TF_BUCKET" : "PROD_TF_BUCKET")
 				.default("")
 				.asString();
-			functionArtifactBucketName = get(environment === "dev" ? "DEV_FUNCTION_ARTIFACT_BUCKET_NAME" : "PROD_FUNCTION_ARTIFACT_BUCKET_NAME")
+			functionArtifactBucketName = get(
+				environment === "dev" ? "DEV_FUNCTION_ARTIFACT_BUCKET_NAME" : "PROD_FUNCTION_ARTIFACT_BUCKET_NAME"
+			)
 				.required()
 				.asString();
 			voicemailBucketSuffix = get("VOICEMAIL_OUTPUT_BUCKET_SUFFIX").required().asString();
