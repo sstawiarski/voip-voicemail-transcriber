@@ -1,6 +1,6 @@
 import type { SecretManagerServiceClient } from "@google-cloud/secret-manager";
-import type { ILogger } from "../../types/utils/ILogger";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
+import type { ILogger } from "../../types/utils/ILogger.ts";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager.ts";
 
 export class SecretsManager implements ISecretsManager {
 	#secretsClient: SecretManagerServiceClient;

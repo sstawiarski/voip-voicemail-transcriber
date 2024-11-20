@@ -1,12 +1,12 @@
 import type { AxiosInstance } from "axios";
 import env from "env-var";
 import { VoipConstants } from "../../constants/index.js";
-import type { Voicemail } from "../../types/data/voip/Voicemail";
-import type { VoicemailBox } from "../../types/data/voip/VoicemailBox";
-import type { VoicemailFile } from "../../types/data/voip/VoicemailFile";
-import type { AudioFormat, IVOIPClient } from "../../types/services/clients/IVOIPClient";
-import type { ILogger } from "../../types/utils/ILogger";
-import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager";
+import type { Voicemail } from "../../types/data/voip/Voicemail.ts";
+import type { VoicemailBox } from "../../types/data/voip/VoicemailBox.ts";
+import type { VoicemailFile } from "../../types/data/voip/VoicemailFile.ts";
+import type { AudioFormat, IVOIPClient } from "../../types/services/clients/IVOIPClient.ts";
+import type { ILogger } from "../../types/utils/ILogger.ts";
+import type { ISecretsManager } from "../../types/utils/cloud/ISecretsManager.ts";
 
 const { VOIP_MS_METHODS, VOIP_MS_STATUSES, MAILBOXES } = VoipConstants;
 const VOIP_MS_API_USERNAME = env.get("VOIP_MS_API_USERNAME").required().asEmailString();
@@ -15,7 +15,9 @@ const SECRET_NAME = env.get("SECRET_NAME").required().asString();
 
 let API_PASSWORD: string;
 
-type APIWrapper<T extends Record<string, any> = {}> = ({ status: typeof VOIP_MS_STATUSES.SUCCESS } & T) | { status: typeof VOIP_MS_STATUSES.FAILURE };
+type APIWrapper<T extends Record<string, any> = {}> =
+	| ({ status: typeof VOIP_MS_STATUSES.SUCCESS } & T)
+	| { status: typeof VOIP_MS_STATUSES.FAILURE };
 
 export class VOIPClient implements IVOIPClient {
 	#axios: AxiosInstance;

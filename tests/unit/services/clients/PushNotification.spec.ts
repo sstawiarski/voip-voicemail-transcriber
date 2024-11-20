@@ -2,10 +2,10 @@ import type { AxiosInstance } from "axios";
 import type { RestoreFn } from "mocked-env";
 import mockEnv from "mocked-env";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { GeneralConstants } from "../../../../src/constants";
-import type { ILogger } from "../../../../src/types/utils/ILogger";
-import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager";
-import { PushNotificationRequestFactory } from "../../../utilities/factories/PushNotificationRequest";
+import { GeneralConstants } from "../../../../src/constants/index.js";
+import type { ILogger } from "../../../../src/types/utils/ILogger.ts";
+import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager.ts";
+import { PushNotificationRequestFactory } from "../../../utilities/factories/PushNotificationRequest.js";
 
 /**
  * @vitest-environment jsdom
@@ -24,7 +24,7 @@ describe("PushNotificationClient Test Suite", () => {
 	} as unknown as ILogger;
 
 	beforeAll(() => {
-		restoreFn = mockEnv({
+		restoreFn = (mockEnv as any)({
 			PUSHOVER_API_URL: mockPushoverUrl,
 			SECRET_NAME: mockSecretName
 		});
@@ -44,7 +44,7 @@ describe("PushNotificationClient Test Suite", () => {
 
 	it("should successfully call Pushover API to send push notification", async () => {
 		/* Dynamic import to ensure file globals are set by the mock env */
-		const { PushNotificationClient } = await import("../../../../src/services/clients/PushNotification");
+		const { PushNotificationClient } = await import("../../../../src/services/clients/PushNotification.js");
 
 		const mockPostFn = vi.fn().mockResolvedValue(void 0);
 		const mockAxios = {
@@ -73,7 +73,7 @@ describe("PushNotificationClient Test Suite", () => {
 	it("should throw error when POST request fails", async () => {
 		expect.assertions(2);
 
-		const { PushNotificationClient } = await import("../../../../src/services/clients/PushNotification");
+		const { PushNotificationClient } = await import("../../../../src/services/clients/PushNotification.js");
 
 		const mockError = new Error("test");
 		const mockPostFn = vi.fn().mockRejectedValue(mockError);

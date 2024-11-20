@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { google } from "@google-cloud/speech/build/protos/protos";
+import { google } from "@google-cloud/speech/build/protos/protos.js";
 import { Factory } from "fishery";
 
 export const TranscriptionResponseFactory = Factory.define<google.cloud.speech.v1.IRecognizeResponse>(() => ({

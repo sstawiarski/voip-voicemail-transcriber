@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { CloudStorage } from "../../../../src/utils/cloud/CloudStorage";
+import { CloudStorage } from "../../../../src/utils/cloud/CloudStorage.js";
 
 describe("CloudStorage Test Suite", () => {
 	describe("saveFile Test Suite", () => {
@@ -49,7 +49,11 @@ describe("CloudStorage Test Suite", () => {
 			const cloudStorage = new CloudStorage({ bucket: mockBucketFn } as any, { error: mockLoggerErrorFn } as any);
 
 			try {
-				await cloudStorage.saveFile({ data: mockData, destinationBucket: mockDestinationBucket, destinationFileName: mockFilename });
+				await cloudStorage.saveFile({
+					data: mockData,
+					destinationBucket: mockDestinationBucket,
+					destinationFileName: mockFilename
+				});
 			} catch (error) {
 				expect(error === mockError).toEqual(true);
 				expect(mockLoggerErrorFn).toHaveBeenCalledTimes(1);
@@ -113,7 +117,9 @@ describe("CloudStorage Test Suite", () => {
 			const cloudStorage = new CloudStorage({ bucket: mockBucketFn } as any, { error: mockLoggerErrorFn } as any);
 
 			try {
-				await cloudStorage.saveFiles([{ data: mockData, destinationBucket: mockDestinationBucket, destinationFileName: mockFilename }]);
+				await cloudStorage.saveFiles([
+					{ data: mockData, destinationBucket: mockDestinationBucket, destinationFileName: mockFilename }
+				]);
 			} catch (error) {
 				expect(error === mockError).toEqual(true);
 				expect(mockLoggerErrorFn).toHaveBeenCalledTimes(1);

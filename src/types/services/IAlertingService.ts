@@ -1,5 +1,5 @@
-import type { EmailRequest } from "../data/EmailRequest";
-import type { PushNotificationRequest } from "../data/PushNotificationRequest";
+import type { EmailRequest } from "../data/EmailRequest.ts";
+import type { PushNotificationRequest } from "../data/PushNotificationRequest.ts";
 
 export interface IAlertingService {
 	sendPushNotification: (input: PushNotificationRequest) => Promise<void>;

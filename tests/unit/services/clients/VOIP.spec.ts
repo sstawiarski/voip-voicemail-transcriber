@@ -3,10 +3,10 @@ import type { AxiosInstance } from "axios";
 import type { RestoreFn } from "mocked-env";
 import mockEnv from "mocked-env";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import type { ILogger } from "../../../../src/types/utils/ILogger";
-import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager";
-import { VoicemailFactory } from "../../../utilities/factories/Voicemail";
-import { VoicemailBoxFactory } from "../../../utilities/factories/VoicemailBox";
+import type { ILogger } from "../../../../src/types/utils/ILogger.ts";
+import type { ISecretsManager } from "../../../../src/types/utils/cloud/ISecretsManager.ts";
+import { VoicemailFactory } from "../../../utilities/factories/Voicemail.js";
+import { VoicemailBoxFactory } from "../../../utilities/factories/VoicemailBox.js";
 
 describe("VOIPClient Test Suite", () => {
 	let restoreFn: RestoreFn | undefined;
@@ -24,7 +24,7 @@ describe("VOIPClient Test Suite", () => {
 	} as unknown as ILogger;
 
 	beforeAll(() => {
-		restoreFn = mockEnv({
+		restoreFn = (mockEnv as any)({
 			VOIP_MS_API_URL: mockVoipMsURL,
 			SECRET_NAME: mockSecretName,
 			VOIP_MS_API_USERNAME: mockUsername
@@ -48,7 +48,7 @@ describe("VOIPClient Test Suite", () => {
 		it("should throw an error when API password cannot be retrieved", async () => {
 			expect.assertions(3);
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 			const mockError = new Error();
 			const mockGetSecretValue = vi.fn().mockRejectedValue(mockError);
 			const mockSecretsManager = {
@@ -70,7 +70,7 @@ describe("VOIPClient Test Suite", () => {
 			expect.assertions(5);
 			const mockPassword = faker.internet.password();
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 
 			const mockGetSecretValue = vi.fn().mockResolvedValue({ VOIP_MS_API_PASSWORD: mockPassword });
 			const mockSecretsManager = {
@@ -106,7 +106,7 @@ describe("VOIPClient Test Suite", () => {
 			expect.assertions(4);
 			const mockPassword = faker.internet.password();
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 
 			const mockGetSecretValue = vi.fn().mockResolvedValue({ VOIP_MS_API_PASSWORD: mockPassword });
 			const mockSecretsManager = {
@@ -139,7 +139,7 @@ describe("VOIPClient Test Suite", () => {
 		it("should successfully get mailboxes", async () => {
 			const mockPassword = faker.internet.password();
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 
 			const mockGetSecretValue = vi.fn().mockResolvedValue({ VOIP_MS_API_PASSWORD: mockPassword });
 			const mockSecretsManager = {
@@ -166,7 +166,7 @@ describe("VOIPClient Test Suite", () => {
 		it("should throw an error when API password cannot be retrieved", async () => {
 			expect.assertions(3);
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 			const mockError = new Error();
 			const mockGetSecretValue = vi.fn().mockRejectedValue(mockError);
 			const mockSecretsManager = {
@@ -191,7 +191,7 @@ describe("VOIPClient Test Suite", () => {
 			const mockPassword = faker.internet.password();
 			const mockInboxId = faker.number.int({ max: 10000 }).toString(10);
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 
 			const mockGetSecretValue = vi.fn().mockResolvedValue({ VOIP_MS_API_PASSWORD: mockPassword });
 			const mockSecretsManager = {
@@ -230,7 +230,7 @@ describe("VOIPClient Test Suite", () => {
 			const mockPassword = faker.internet.password();
 			const mockInboxId = faker.number.int({ max: 10000 }).toString(10);
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 
 			const mockGetSecretValue = vi.fn().mockResolvedValue({ VOIP_MS_API_PASSWORD: mockPassword });
 			const mockSecretsManager = {
@@ -266,7 +266,7 @@ describe("VOIPClient Test Suite", () => {
 			const mockPassword = faker.internet.password();
 			const mockInboxId = faker.number.int({ max: 10000 }).toString(10);
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 
 			const mockGetSecretValue = vi.fn().mockResolvedValue({ VOIP_MS_API_PASSWORD: mockPassword });
 			const mockSecretsManager = {
@@ -290,7 +290,7 @@ describe("VOIPClient Test Suite", () => {
 			const mockPassword = faker.internet.password();
 			const mockInboxId = faker.number.int({ max: 10000 }).toString(10);
 
-			const { VOIPClient } = await import("../../../../src/services/clients/VOIP");
+			const { VOIPClient } = await import("../../../../src/services/clients/VOIP.js");
 
 			const mockGetSecretValue = vi.fn().mockResolvedValue({ VOIP_MS_API_PASSWORD: mockPassword });
 			const mockSecretsManager = {

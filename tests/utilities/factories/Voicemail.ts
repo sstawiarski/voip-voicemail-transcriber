@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { format } from "date-fns";
 import { Factory } from "fishery";
-import type { Voicemail } from "../../../src/types/data/voip/Voicemail";
+import type { Voicemail } from "../../../src/types/data/voip/Voicemail.ts";
 
 export const VoicemailFactory = Factory.define<Voicemail>(() => ({
 	email: faker.internet.email(),
