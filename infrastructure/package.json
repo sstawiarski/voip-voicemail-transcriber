@@ -20,7 +20,7 @@
 		"node": ">=14.0"
 	},
 	"dependencies": {
-		"@cdktf/provider-google": "^14.18.0",
+		"@cdktf/provider-google": "^14.20.0",
 		"cdktf": "^0.20.11",
 		"cdktf-cli": "^0.20.11",
 		"constructs": "^10.4.2"
@@ -32,7 +32,7 @@
 		"dotenv": "^16.4.7",
 		"is-ci": "^4.1.0",
 		"jest": "^29.7.0",
-		"ts-jest": "^29.2.5",
+		"ts-jest": "^29.2.6",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.7.3"
 	}
