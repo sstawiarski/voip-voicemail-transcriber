@@ -94,7 +94,7 @@ class VoicemailServiceStack extends TerraformStack {
 			name: `${config.environment}-voicemail-handler`,
 			location: config.region,
 			buildConfig: {
-				runtime: "nodejs20",
+				runtime: "nodejs22",
 				entryPoint: "voicemail_handler",
 				source: {
 					storageSource: {
