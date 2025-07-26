@@ -20,7 +20,7 @@
 		"node": ">=14.0"
 	},
 	"dependencies": {
-		"@cdktf/provider-google": "^16.3.0",
+		"@cdktf/provider-google": "^16.7.0",
 		"cdktf": "^0.21.0",
 		"cdktf-cli": "^0.21.0",
 		"constructs": "^10.4.2"
@@ -29,9 +29,9 @@
 		"@types/is-ci": "^3.0.4",
 		"@types/jest": "^30.0.0",
 		"@types/node": "^22.15.33",
-		"dotenv": "^16.5.0",
+		"dotenv": "^17.2.1",
 		"is-ci": "^4.1.0",
-		"jest": "^30.0.3",
+		"jest": "^30.0.5",
 		"ts-jest": "^29.4.0",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.8.3"
