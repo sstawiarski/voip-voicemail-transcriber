@@ -16,3 +16,4 @@ lib/
 /infrastructure/.env
 /coverage
 /.env
+__snapshots__

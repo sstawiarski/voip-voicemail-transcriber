@@ -11,7 +11,7 @@ export const VoicemailFactory = Factory.define<Voicemail>(() => ({
 	new: faker.lorem.word(),
 	folder: "INBOX",
 	callerid: `${faker.number.int({ min: 1000000000, max: 9999999999 })} <${faker.number.int({ min: 1000000000, max: 9999999999 })}>`,
-	date: format(faker.date.recent(), "yyyy-MM-dd HH:MM:SS"),
+	date: format(faker.date.recent(), "yyyy-MM-dd HH:mm:ss"),
 	duration: `${faker.number.int({ max: 1000 })}:${faker.number.int({ max: 59 })}:${faker.number.int({ max: 59 })}`,
 	listened: faker.helpers.arrayElement(["yes", "no"]),
 	urgent: faker.helpers.arrayElement(["yes", "no"]),

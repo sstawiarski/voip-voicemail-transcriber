@@ -6,6 +6,7 @@ export default defineConfig({
 		exclude: [...configDefaults.exclude, "tests/utilities/**"],
 		coverage: {
 			provider: "v8"
-		}
+		},
+		unstubEnvs: true
 	}
 });
